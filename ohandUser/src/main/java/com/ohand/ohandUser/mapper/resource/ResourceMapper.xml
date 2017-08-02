@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohand.ohandUser.mapper.ResourceMapper">
+	<resultMap id="result"
+		type="com.ohand.ohandUser.domain.tree.ResourceTreeGridVO">
+		<result property="id" column="Id" />
+		<result property="resCode" column="res_Code" />
+		<result property="name" column="name" />
+		<result property="realPath" column="real_Path" />
+		<result property="redirectPath" column="redirect_Path" />
+		<result property="enableFlag" column="enable_Flag" />
+		<result property="creatorId" column="creator_Id" />
+		<result property="creatorName" column="creator_Name" />
+		<result property="resourceType" column="resource_Type" />
+		<result property="description" column="description" />
+		<result property="parentId" column="parent_Id" />
+		<result property="treeLevel" column="tree_Level" />
+		<result property="priority" column="priority" />		
+		<result property="topId" column="top_Id" />
+		<result property="parentNodes" column="parent_Nodes" />	
+		<result property="isNewPage" column="is_New_Page" />	
+		<result property="isModal" column="is_Modal" />
+		<result property="sysCode" column="sys_Code" />	
+		<result property="isShow2Client" column="isShow2Client" />
+	</resultMap>
+	<resultMap id="resultTree"
+		type="com.ohand.ohandUser.domain.tree.ResourceTreeGridVO">
+		<result property="id" column="Id" />
+		<result property="resCode" column="res_Code" />
+		<result property="name" column="name" />
+		<result property="realPath" column="real_Path" />
+		<result property="redirectPath" column="redirect_Path" />
+		<result property="enableFlag" column="enable_Flag" />
+		<result property="creatorId" column="creator_Id" />
+		<result property="creatorName" column="creator_Name" />
+		<result property="resourceType" column="resource_Type" />
+		<result property="description" column="description" />
+		<result property="parentId" column="parent_Id" />
+		<result property="treeLevel" column="tree_Level" />
+		<result property="priority" column="priority" />		
+		<result property="topId" column="top_Id" />
+		<result property="parentNodes" column="parent_Nodes" />
+		<result property="isNewPage" column="is_New_Page" />	
+		<result property="isModal" column="is_Modal" />	
+		<result property="sysCode" column="sys_Code" />	
+		<result property="isShow2Client" column="isShow2Client" />		
+	</resultMap>
+	<sql id="tableColumn"> 	Id,
+							res_Code,
+							name,
+							real_Path,
+							redirect_Path,
+							enable_Flag,
+							creator_Id,
+							creator_Name,
+							resource_Type,
+							description,
+							parent_Id,
+							tree_Level,
+							priority,
+							top_Id,
+							parent_Nodes,
+							is_New_Page,
+							is_Modal ,
+							sys_Code,
+							isShow2Client	
+	</sql>
+	<sql id="dynamicCondition"> 
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="resCode != null"> AND res_Code like #{resCode , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="name != null"> AND name like #{name , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="realPath != null"> AND real_Path like #{realPath , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="redirectPath != null"> AND redirect_Path like #{redirectPath , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="enableFlag != null"> AND enable_Flag = #{enableFlag,jdbcType=INTEGER}  </if>	
+		<if test="creatorId != null"> AND creator_Id = #{creatorId,jdbcType=INTEGER}  </if>	
+		<if test="creatorName != null"> AND creator_Name like #{creatorName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="resourceType != null"> AND resource_Type = #{resourceType,jdbcType=INTEGER}  </if>	
+		<if test="description != null"> AND description like #{description , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="parentId != null"> AND parent_Id = #{parentId,jdbcType=INTEGER}  </if>	
+		<if test="treeLevel != null"> AND tree_Level = #{treeLevel,jdbcType=INTEGER}  </if>
+		<if test="priority != null"> AND priority = #{priority,jdbcType=INTEGER}  </if>
+		<if test="topId != null"> AND top_Id = #{topId,jdbcType=INTEGER}  </if>
+		<if test="parentNodes != null"> AND parent_Nodes like #{parentNodes , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="isNewPage != null"> AND is_New_Page = #{isNewPage,jdbcType=INTEGER}  </if>
+		<if test="isModal != null"> AND is_Modal = #{isModal,jdbcType=INTEGER}  </if>
+		<if test="sysCode != null"> AND sys_Code = #{sysCode,jdbcType=VARCHAR}  </if>
+		<if test="isShow2Client != null"> AND isShow2Client = #{isShow2Client,jdbcType=INTEGER}  </if>
+	</sql>	
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}  	#{AscOrDesc} 	</when>
+			 <otherwise>   order by priority	asc  	</otherwise>
+		</choose>
+	</sql>
+	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_resource 
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			*
+		FROM pf_resource 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			*
+		FROM pf_resource 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultMap="resultTree">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_resource 
+		WHERE 1=1 
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+		count(1) numb
+		FROM pf_resource 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+	
+	<select id="getObjectVOListTreePagination" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			*
+		FROM pf_resource 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>
+	<select id="getObjectVOListTreeCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+		count(1) numb
+		FROM pf_resource 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>
+	<insert id="insertObject" parameterType="ResourceDomain">
+		INSERT INTO
+		pf_resource
+		(	  ID            ,
+			  RES_CODE      ,
+			  NAME          ,
+			  REAL_PATH     ,
+			  REDIRECT_PATH ,
+			  ENABLE_FLAG   ,
+			  CREATOR_ID    ,
+			  CREATOR_NAME  ,
+			  RESOURCE_TYPE ,
+			  DESCRIPTION   ,
+			  PARENT_ID     ,
+			  TREE_LEVEL    ,
+			  PRIORITY      ,
+			  TOP_ID        ,
+			  PARENT_NODES ,
+			  is_New_Page,
+			  is_Modal ,
+			  sys_code,
+			  isShow2Client
+		)
+		VALUES
+		(	#{id}, 
+			#{resCode ,  jdbcType=VARCHAR },
+			#{name ,  jdbcType=VARCHAR },
+			#{realPath ,jdbcType=VARCHAR},
+			#{redirectPath,jdbcType=VARCHAR},
+			#{enableFlag,jdbcType=INTEGER},
+			#{creatorId ,jdbcType=INTEGER},
+			#{creatorName ,jdbcType=VARCHAR},
+			#{resourceType ,  jdbcType=INTEGER }, 
+			#{description ,  jdbcType=VARCHAR }, 
+			#{parentId ,jdbcType=INTEGER},
+			#{treeLevel ,jdbcType=INTEGER},
+			#{priority ,jdbcType=INTEGER},
+			#{topId ,jdbcType=INTEGER},
+			#{parentNodes ,  jdbcType=VARCHAR },
+			#{isNewPage ,jdbcType=INTEGER},
+			#{isModal ,jdbcType=INTEGER},
+			#{sysCode ,  jdbcType=VARCHAR },
+			#{isShow2Client ,jdbcType=INTEGER}
+			
+		)
+	</insert>
+	<update id="updateObject" parameterType="ResourceDomain">
+		UPDATE pf_resource  SET id=id 
+			<if test="resCode != null"> , res_Code = #{resCode,jdbcType=VARCHAR}  	</if>
+			<if test="name != null"> , name = #{name,jdbcType=VARCHAR}  	</if>
+			<if test="realPath != null"> , real_Path = #{realPath,jdbcType=VARCHAR}  	</if>
+			<if test="redirectPath != null"> , redirect_Path = #{redirectPath,jdbcType=VARCHAR}  	</if>
+			<if test="enableFlag != null"> , enable_Flag = #{enableFlag,jdbcType=INTEGER}  	</if>
+			<if test="creatorId != null"> , creator_Id = #{creatorId,jdbcType=INTEGER}  	</if>
+			<if test="creatorName != null"> , creator_Name = #{creatorName,jdbcType=VARCHAR}  	</if>
+			<if test="resourceType != null"> , resource_Type = #{resourceType,jdbcType=INTEGER}  	</if>
+			<if test="description != null"> , description = #{description,jdbcType=VARCHAR}  	</if>
+			<if test="parentId != null"> , parent_Id = #{parentId,jdbcType=INTEGER}  	</if>
+			<if test="treeLevel != null"> , tree_Level = #{treeLevel,jdbcType=INTEGER}  	</if>
+			<if test="priority != null"> , priority = #{priority,jdbcType=INTEGER}  	</if>
+			<if test="topId != null"> , top_Id = #{topId,jdbcType=INTEGER}  	</if>
+			<if test="parentNodes != null"> , parent_Nodes = #{parentNodes,jdbcType=VARCHAR}  	</if>
+			<if test="isNewPage != null"> , is_New_Page = #{isNewPage,jdbcType=INTEGER}  	</if>
+			<if test="isModal != null"> , is_Modal = #{isModal,jdbcType=INTEGER}  	</if>
+			<if test="sysCode != null"> , sys_Code = #{sysCode,jdbcType=VARCHAR}  	</if>
+			<if test="isShow2Client != null"> , isShow2Client = #{isShow2Client,jdbcType=INTEGER}  	</if>
+	    WHERE Id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<delete  id="deleteObjectById" parameterType="int" >
+		DELETE FROM pf_resource   WHERE  ID=#{id,jdbcType=INTEGER}
+	</delete>
+	
+</mapper>

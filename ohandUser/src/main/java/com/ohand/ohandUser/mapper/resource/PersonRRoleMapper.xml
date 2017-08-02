@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandUser.mapper.PersonRRoleMapper">
+  <resultMap id="result" type="com.ohand.ohandUser.domain.PersonRRoleDomain">
+      <result property="id" column="Id" />
+      <result property="roleId" column="Role_Id" />
+      <result property="roleName" column="Role_Name" />
+      <result property="personName" column="Person_Name" />
+      <result property="personId" column="Person_Id" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Role_Id
+				  ,Role_Name
+				  ,Person_Name
+				  ,Person_Id
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="roleId != null"> AND role_Id = #{roleId,jdbcType=INTEGER}  		</if>
+		<if test="roleName != null"> AND role_Name like #{roleName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="personName != null"> AND person_Name like #{personName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="personId != null"> AND person_Id = #{personId,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<if test="orderByField != null"> order by #{orderByField}  		</if>
+		<if test="id != null"> order by 	 Id	desc  		</if>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_person_r_role  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_person_r_role    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_person_r_role   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_person_r_role    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_person_r_role    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="PersonRRoleDomain">
+    insert into pf_person_r_role
+                   (   
+				  Id
+				  ,Role_Id
+				  ,Role_Name
+				  ,Person_Name
+				  ,Person_Id
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{roleId,jdbcType=INTEGER}
+				  ,#{roleName,jdbcType=VARCHAR}
+				  ,#{personName,jdbcType=VARCHAR}
+				  ,#{personId,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="PersonRRoleDomain">
+    update pf_person_r_role 
+                 set     id=id  
+   						<if test="roleId!=null"  >,<![CDATA[ Role_Id=#{roleId,jdbcType=INTEGER}# ]]></if>
+   						<if test="roleName!=null"  >,<![CDATA[ Role_Name=#{roleName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="personName!=null"  >,<![CDATA[ Person_Name=#{personName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="personId!=null"  >,<![CDATA[ Person_Id=#{personId,jdbcType=INTEGER}# ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_person_r_role    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+  <delete id="deleteObjectByRoleId" parameterType="int" >
+    DELETE FROM pf_person_r_role    WHERE Role_Id= #{roleId,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>
+

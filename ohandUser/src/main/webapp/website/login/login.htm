@@ -1,0 +1,152 @@
+﻿<!doctype html>
+<HTML>
+<HEAD>
+<TITLE>Ohand系统登录</TITLE>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<LINK rel="shortcut icon" href="/login/resources/fc/images/icon/favicon.ico">
+<!--[if lt IE 9]>
+<SCRIPT src="file/html5.js"></SCRIPT>
+<![endif]-->
+<!--[if lt IE 7]>
+  <script src="file/iepng.js" type="text/javascript"></script>
+  <script type="text/javascript">
+	EvPNG.fix('div, ul, img, li, input'); //EvPNG.fix('包含透明PNG图片的标签'); 多个标签之间用英文逗号隔开。
+</script>
+  <![endif]-->
+<LINK rel=stylesheet type=text/css href="/ohandUser/website/login/file/zice.style.css">
+<LINK rel=stylesheet type=text/css href="/ohandUser/website/login/file/buttons.css">
+<LINK rel=stylesheet type=text/css href="/ohandUser/website/login/file/icon.css">
+<LINK rel=stylesheet type=text/css href="/ohandUser/website/login/file/tipsy.css" media=all>
+<STYLE type=text/css>
+HTML {
+	BACKGROUND-IMAGE: none
+}
+
+LABEL.iPhoneCheckLabelOn SPAN {
+	PADDING-LEFT: 0px
+}
+
+#versionBar {
+	HEIGHT: 35px;
+	POSITION: fixed;
+	TEXT-ALIGN: center;
+	LEFT: 0px;
+	Z-INDEX: 11;
+	LINE-HEIGHT: 35px;
+	WIDTH: 100%;
+	BOTTOM: 0px;
+	BACKGROUND-COLOR: #212121;
+	-moz-box-shadow: black 0px 10px 10px -10px inset;
+	-webkit-box-shadow: black 0px 10px 10px -10px inset;
+	box-shadow: black 0px 10px 10px -10px inset
+}
+
+.copyright {
+	FONT-SIZE: 10px;
+	COLOR: #ccc;
+	TEXT-ALIGN: center
+}
+
+.copyright A {
+	COLOR: #a31f1a;
+	TEXT-DECORATION: none
+}
+
+.on_off_checkbox {
+	WIDTH: 0px
+}
+
+#login .logo {
+	HEIGHT: 51px;
+	WIDTH: 500px
+}
+</STYLE>
+
+<META name=GENERATOR content="MSHTML 10.00.9200.17054">
+<script type="text/javascript">
+</script>
+</HEAD>
+<BODY >
+	<DIV id=alertMessage></DIV>
+	<DIV id=successLogin></DIV>
+	<DIV class=text_success>
+		<IMG alt="Please wait" src="/ohandUser/website/login/file/loader_green.gif"> <SPAN>登陆成功!请稍后....</SPAN>
+	</DIV>
+	<div><a href="http://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=cTKESL0dKKgnxPPhyNAdLlG7&redirect_uri=http://localhost:8080/portal/home">百度账号登陆</a></div>
+	<DIV id=login>
+		<DIV class="ribbon"	style="BACKGROUND-IMAGE: url()"></DIV>
+		<DIV class=inner>
+			<DIV class=logo>
+				<IMG src="/ohandUser/website/login/file/head.png"><IMG src="/ohandUser/website/login/file/foot.png">
+			</DIV>
+			<DIV class=formLogin>
+				<FORM id=formLogin method=post name=formLogin
+					action="/ohandUser/portal/home"
+					check="/ohandUser/website/loginAction!login.action">
+					<INPUT id=userKey type=hidden
+						value=D1B5CC2FE46C4CC983C073BCA897935608D926CD32992B5900
+						name=userKey>
+					<DIV class=tip>
+						<INPUT id=account title=用户账号 style="width: 280px;" class=account value=-1000
+							name=account nullmsg="请输入用户账号!" iscookie="true">
+					</DIV>
+					<DIV class=tip>
+						<INPUT id=password title=密码 style="width: 270px;" class=password type=password
+							value=1 name=password nullmsg="请输入密码!">
+					</DIV>
+					<DIV class=tip>
+						<INPUT id="randCode" title="" style="width: 280px;" class="randCode" name="randCode"
+							nullmsg="请输入验证码!" value="">
+						<DIV style="FLOAT: right; MARGIN-LEFT: -220px; MARGIN-RIGHT: 40px">
+							<IMG id=randCodeImage src="/ohandUser/website/login/file/randCodeImage">
+						</DIV>
+					</DIV>
+					<DIV class=loginButton>
+						<DIV style="FLOAT: left; MARGIN-LEFT: -9px">
+							<INPUT id=on_off class=on_off_checkbox CHECKED type=checkbox
+								value=0 name=remember> <SPAN class=f_help>是否记住用户名
+								?</SPAN>
+						</DIV>
+						<DIV
+							style="FLOAT: right; PADDING-BOTTOM: 3px; PADDING-TOP: 3px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; MARGIN-RIGHT: -12px">
+							<DIV>
+								<UL class=uibutton-group>
+									<LI><A id=but_login class="uibutton normal"
+										href="javascript:void(0)" >登陆</A></LI>
+									<LI><A id=forgetpass class="uibutton normal"
+										href="javascript:void(0)" >重置</A></LI>
+								</UL>
+							</DIV>
+							<DIV style="FLOAT: left; MARGIN-LEFT: 30px">
+								<A href="javascript:void(0)" ><SPAN
+									class=f_help></SPAN></A>
+							</DIV>
+						</DIV>
+						<DIV class=clear></DIV>
+					</DIV>
+				</FORM>
+			</DIV>
+		</DIV>
+		<DIV class=shadow></DIV>
+	</DIV>
+	<!--Login div-->
+	<DIV class=clear></DIV>
+	<DIV id=versionBar>
+		<DIV class=copyright>
+			© 版权所有 <SPAN class=tip><A title="Ohand"
+				href="javascript:void(0)" >Ohand</A>
+				(推荐使用IE8+,谷歌浏览器可以获得更快,更安全的页面响应速度)技术支持:<A title="Ohand"
+				href="http://demo.jeecg.org:8080/#">Ohand</A></SPAN>
+		</DIV>
+	</DIV>
+	<!-- Link JScript-->
+	<SCRIPT type=text/javascript src="/ohandUser/website/login/file/jquery-1.7.2.min.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="/ohandUser/website/login/file/jquery.cookie.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="/ohandUser/website/login/file/jquery-jrumble.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="/ohandUser/website/login/file/jquery.tipsy.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="/ohandUser/website/login/file/iphone.check.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="/ohandUser/website/login/file/login.js"></SCRIPT>
+	<SCRIPT type=text/javascript src="/ohandUser/website/login/file/lhgdialog.min.js"></SCRIPT>
+</BODY>
+</HTML>

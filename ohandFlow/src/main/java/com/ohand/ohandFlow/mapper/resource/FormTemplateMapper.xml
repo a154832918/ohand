@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.FormTemplateMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.FormTemplateDomain">
+      <result property="id" column="Id" />
+      <result property="templateName" column="Template_Name" />
+      <result property="templateDesc" column="Template_Desc" />
+      <result property="creatorId" column="Creator_Id" />
+      <result property="creator" column="Creator" />
+      <result property="createDate" column="Create_Date" />
+     <result property="templateContent" column="Template_Content" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Template_Name
+				  ,Template_Desc
+				  ,Creator_Id
+				  ,Creator
+				  ,Create_Date
+				  ,Template_Content
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="templateName != null"> AND template_Name like #{templateName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="templateDesc != null"> AND template_Desc like #{templateDesc , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="creatorId != null"> AND creator_Id = #{creatorId,jdbcType=INTEGER}  		</if>
+		<if test="creator != null"> AND creator like #{creator , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="createDate != null"> AND create_Date =#{gtcreateDate,jdbcType=TIMESTAMP} </if>
+  </sql>
+	<sql id="orderByFragment">
+		<if test="orderByField != null"> order by #{orderByField}  		</if>
+		<if test="id != null"> order by 	 Id	desc  		</if>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_form_template  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_form_template    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_template   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_template    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_form_template    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="FormTemplateDomain">
+    insert into pf_form_template
+                   (   
+				  Id
+				  ,Template_Name
+				  ,Template_Desc
+				  ,Creator_Id
+				  ,Creator
+				  ,Create_Date
+				  ,Template_Content
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{templateName,jdbcType=VARCHAR}
+				  ,#{templateDesc,jdbcType=VARCHAR}
+				  ,#{creatorId,jdbcType=INTEGER}
+				  ,#{creator,jdbcType=VARCHAR}
+				  ,#{createDate,jdbcType=TIMESTAMP}
+				  ,#{templateContent,jdbcType=VARCHAR}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="FormTemplateDomain">
+    update pf_form_template 
+                 set     id=id  
+   						<if test="templateName!=null"  >,<![CDATA[ Template_Name=#{templateName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="templateDesc!=null"  >,<![CDATA[ Template_Desc=#{templateDesc,jdbcType=VARCHAR}# ]]></if>
+   						<if test="creatorId!=null"  >,<![CDATA[ Creator_Id=#{creatorId,jdbcType=INTEGER}# ]]></if>
+   						<if test="creator!=null"  >,<![CDATA[ Creator=#{creator,jdbcType=VARCHAR}# ]]></if>
+   						<if test="createDate!=null"  >,<![CDATA[ Create_Date=#{createDate,jdbcType=TIMESTAMP}# ]]></if>
+   						<if test="templateContent!=null"  >,<![CDATA[ Template_Content=#{templateContent,jdbcType=VARCHAR}# ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_form_template    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+  
+</mapper>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.FlowCategoryMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.tree.FlowCategoryTreeGridVO">
+      <result property="id" column="Id" />
+      <result property="parentId" column="Parent_Id" />
+      <result property="priority" column="Priority" />
+      <result property="showName" column="Show_Name" />
+      <result property="hiddenValue" column="Hidden_Value" />
+      <result property="enableFlag" column="Enable_Flag" />
+      <result property="description" column="Description" />
+      <result property="parentNodes" column="Parent_Nodes" />
+      <result property="topId" column="Top_Id" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Parent_Id
+				  ,Priority
+				  ,Show_Name
+				  ,Hidden_Value
+				  ,Enable_Flag
+				  ,Description
+				  ,Parent_Nodes
+				  ,Top_Id
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="parentId != null"> AND parent_Id = #{parentId,jdbcType=INTEGER}  </if>
+		<if test="priority != null"> AND priority = #{priority,jdbcType=INTEGER}  </if>
+		<if test="showName != null"> AND Show_Name like #{showName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="hiddenValue != null"> AND Hidden_Value like #{hiddenValue , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="enableFlag != null"> AND Enable_Flag = #{enableFlag,jdbcType=INTEGER}  </if>
+		<if test="description != null"> AND description like #{description , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="topId != null"> AND top_Id = #{topId,jdbcType=INTEGER}  </if>
+		<if test="parentNodes != null"> AND parent_Nodes like #{parentNodes , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="eqShowName"> AND show_name=#{eqShowName,jdbcType=VARCHAR}</if>		         	
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}   #{ascOrDesc} </when>
+			 <otherwise>  order by 	 priority	asc  	  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_flow_category  
+		WHERE  ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_flow_category  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_flow_category   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_flow_category   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_flow_category   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+	
+	<select id="getObjectVOListTreePagination" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+		*
+		FROM pf_flow_category  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>
+	
+	<select id="getObjectVOListTreeCount" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+		count(1) numb
+		FROM pf_flow_category 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+			
+ 	<insert id="insertObject" parameterType="FlowCategoryDomain">
+    	insert into pf_flow_category
+                   (   
+				  Id
+				  ,Parent_Id
+				  ,Priority
+				  ,Show_Name
+				  ,Hidden_Value
+				  ,Enable_Flag
+				  ,Description
+				  ,Parent_Nodes
+				  ,Top_Id
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{parentId,jdbcType=INTEGER}
+				  ,#{priority,jdbcType=INTEGER}
+				  ,#{showName,jdbcType=VARCHAR}
+				  ,#{hiddenValue,jdbcType=VARCHAR}
+				  ,#{enableFlag,jdbcType=INTEGER}
+				  ,#{description,jdbcType=VARCHAR}
+				  ,#{parentNodes,jdbcType=VARCHAR}
+				  ,#{topId,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="FlowCategoryDomain">
+    update pf_flow_category 
+                 set     id=id  
+   						<if test="parentId!=null"  >,<![CDATA[ Parent_Id=#{parentId,jdbcType=INTEGER} ]]></if>
+   						<if test="priority!=null"  >,<![CDATA[ Priority=#{priority,jdbcType=INTEGER} ]]></if>
+   						<if test="showName!=null"  >,<![CDATA[ Show_Name=#{showName,jdbcType=VARCHAR} ]]></if>
+   						<if test="hiddenValue!=null"  >,<![CDATA[ Hidden_Value=#{hiddenValue,jdbcType=VARCHAR} ]]></if>
+   						<if test="enableFlag!=null"  >,<![CDATA[ Enable_Flag=#{enableFlag,jdbcType=INTEGER} ]]></if>
+   						<if test="description!=null"  >,<![CDATA[ Description=#{description,jdbcType=VARCHAR} ]]></if>
+   						<if test="parentNodes!=null"  >,<![CDATA[ Parent_Nodes=#{parentNodes,jdbcType=VARCHAR} ]]></if>
+   						<if test="topId!=null"  >,<![CDATA[ Top_Id=#{topId,jdbcType=INTEGER} ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_flow_category    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+ 
+</mapper>

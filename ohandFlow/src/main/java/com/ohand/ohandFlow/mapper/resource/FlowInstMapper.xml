@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.FlowInstMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.FlowInstDomain">
+      <result property="id" column="Id" />
+      <result property="title" column="title" />
+      <result property="flowCode" column="flow_Code" />
+      <result property="flowId" column="Flow_Id" />
+      <result property="flowName" column="Flow_Name" />
+      <result property="formId" column="Form_Id" />
+      <result property="formCode" column="form_Code" />
+      <result property="formName" column="Form_Name" />
+      <result property="createDate" column="Create_Date" />
+      <result property="creator" column="Creator" />
+      <result property="creatorId" column="Creator_Id" />
+      <result property="status" column="Status" />
+      <result property="guid" column="Guid" />
+      <result property="rId" column="rId" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,title
+				  ,Flow_Id
+				  ,flow_code
+				  ,Flow_Name
+				  ,Form_Id
+				  ,form_code
+				  ,Form_Name
+				  ,Create_Date
+				  ,Creator
+				  ,Creator_Id
+				  ,Status
+				  ,Guid
+				  ,rId
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>	
+		<if test="flowCode != null"> AND flow_Code = #{flowCode,jdbcType=INTEGER}  		</if>	
+		<if test="flowId != null"> AND flow_Id = #{flowId,jdbcType=INTEGER}  		</if>
+		<if test="flowName != null"> AND flow_Name like #{flowName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>		
+		<if test="title != null"> AND title like #{title , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>		
+		<if test="formId != null"> AND form_Id = #{formId,jdbcType=INTEGER}  		</if>
+		<if test="formCode != null"> AND form_Code = #{formCode,jdbcType=INTEGER}  		</if>
+		<if test="formName != null"> AND form_Name like #{formName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>		
+		<if test="createDate != null"> AND create_Date = #{createDate,jdbcType=TIMESTAMP}  		</if>
+		<if test="creator != null"> AND creator like #{creator , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>		
+		<if test="creatorId != null"> AND creator_Id = #{creatorId,jdbcType=INTEGER}  		</if>
+		<if test="status != null"> AND status = #{status,jdbcType=INTEGER}  		</if>
+		<if test="guid != null"> AND guid like #{guid , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>		
+  		<if test="rId != null"> AND rId = #{rId,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}  	#{AscOrDesc} 	</when>
+			 <otherwise>   order by Id	desc  	</otherwise>
+		</choose>
+	</sql>  	
+	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_flow_inst  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_flow_inst  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		   order by id desc 
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_flow_inst  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		  order by id desc   
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_flow_inst  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		   order by id desc   
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_flow_inst  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="FlowInstDomain">
+    insert into pf_flow_inst
+                   (   
+				  Id
+				  ,title
+				  ,Flow_Id
+				  ,flow_code
+				  ,Flow_Name
+				  ,Form_Id
+				  ,form_code
+				  ,Form_Name
+				  ,Create_Date
+				  ,Creator
+				  ,Creator_Id
+				  ,Status
+				  ,Guid
+				  ,rId
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{title,jdbcType=VARCHAR}
+				  ,#{flowId,jdbcType=INTEGER}
+				  ,#{flowCode,jdbcType=INTEGER}
+				  ,#{flowName,jdbcType=VARCHAR}
+				  ,#{formId,jdbcType=INTEGER}
+				  ,#{formCode,jdbcType=INTEGER}
+				  ,#{formName,jdbcType=VARCHAR}
+				  ,#{createDate,jdbcType=TIMESTAMP}
+				  ,#{creator,jdbcType=VARCHAR}
+				  ,#{creatorId,jdbcType=INTEGER}
+				  ,#{status,jdbcType=INTEGER}
+				  ,#{guid,jdbcType=VARCHAR}
+				  ,#{rId,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="FlowInstDomain">
+    update pf_flow_inst 
+                 set     id=id  
+   						<if test="flowId!=null"  >,<![CDATA[ Flow_Id=#{flowId,jdbcType=INTEGER} ]]></if>
+   						<if test="flowCode!=null"  >,<![CDATA[ flow_Code=#{flowCode,jdbcType=INTEGER} ]]></if>
+   						<if test="title!=null"  >,<![CDATA[ title=#{title,jdbcType=VARCHAR} ]]></if>
+   						<if test="flowName!=null"  >,<![CDATA[ Flow_Name=#{flowName,jdbcType=VARCHAR} ]]></if>
+   						<if test="formId!=null"  >,<![CDATA[ Form_Id=#{formId,jdbcType=INTEGER} ]]></if>
+   						<if test="formCode!=null"  >,<![CDATA[ form_Code=#{formCode,jdbcType=INTEGER} ]]></if>
+   						<if test="formName!=null"  >,<![CDATA[ Form_Name=#{formName,jdbcType=VARCHAR} ]]></if>
+   						<if test="createDate!=null"  >,<![CDATA[ Create_Date=#{createDate,jdbcType=TIMESTAMP} ]]></if>
+   						<if test="creator!=null"  >,<![CDATA[ Creator=#{creator,jdbcType=VARCHAR} ]]></if>
+   						<if test="creatorId!=null"  >,<![CDATA[ Creator_Id=#{creatorId,jdbcType=INTEGER} ]]></if>
+   						<if test="status!=null"  >,<![CDATA[ Status=#{status,jdbcType=INTEGER} ]]></if>
+   						<if test="guid!=null"  >,<![CDATA[ Guid=#{guid,jdbcType=VARCHAR} ]]></if>
+   						<if test="rId!=null"  >,<![CDATA[ rId=#{rId,jdbcType=INTEGER} ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_flow_inst    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+  
+</mapper>
+

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.FlowAttachFileMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.FlowAttachFileDomain">
+      <result property="id" column="Id" />
+      <result property="fileName" column="File_Name" />
+      <result property="suffix" column="Suffix" />
+      <result property="formId" column="Form_Id" />
+      <result property="filePath" column="File_Path" />
+      <result property="fileVersion" column="File_Version" />
+      <result property="uploader" column="Uploader" />
+      <result property="uploaderId" column="Uploader_Id" />
+      <result property="uploaderDate" column="Uploader_Date" />
+      <result property="instId" column="Inst_Id" />
+      <result property="formCode" column="Form_Code" />
+      <result property="encryptType" column="Encrypt_Type" />
+      <result property="passKey" column="Pass_Key" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,File_Name
+				  ,Suffix
+				  ,Form_Id
+				  ,File_Path
+				  ,File_Version
+				  ,Uploader
+				  ,Uploader_Id
+				  ,Uploader_Date
+				  ,Inst_Id
+				  ,Form_Code
+				  ,Encrypt_Type
+				  ,Pass_Key
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="fileName != null"> AND file_Name like #{fileName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="suffix != null"> AND suffix like #{suffix , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="formId != null"> AND form_Id = #{formId,jdbcType=INTEGER}  		</if>
+		<if test="filePath != null"> AND file_Path = #{filePath,jdbcType=VARCHAR}  		</if>
+		<if test="fileVersion != null"> AND file_Version = #{fileVersion,jdbcType=INTEGER}  		</if>
+		<if test="uploader != null"> AND uploader = #{uploader,jdbcType=VARCHAR}  		</if>
+		<if test="uploaderId != null"> AND uploader_Id = #{uploaderId,jdbcType=VARCHAR}  		</if>
+		<if test="uploaderDate != null"> AND uploader_Date = #{uploaderDate,jdbcType=TIMESTAMP}  		</if>
+		<if test="instId != null"> AND inst_Id = #{instId,jdbcType=INTEGER}  		</if>
+		<if test="formCode != null"> AND form_Code = #{formCode,jdbcType=INTEGER}  		</if>
+		<if test="encryptType != null"> AND encrypt_Type = #{encryptType,jdbcType=INTEGER}  		</if>
+		<if test="passKey != null"> AND pass_Key = #{passKey,jdbcType=VARCHAR}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<if test="orderByField != null"> order by #{orderByField}  		</if>
+		<if test="id != null"> order by 	 Id	desc  		</if>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_flow_attachfile  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_flow_attachfile    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_flow_attachfile   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_flow_attachfile    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_flow_attachfile    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="FlowAttachFileDomain">
+    insert into pf_flow_attachfile
+                   (   
+				  Id
+				  ,File_Name
+				  ,Suffix
+				  ,Form_Id
+				  ,File_Path
+				  ,File_Version
+				  ,Uploader
+				  ,Uploader_Id
+				  ,Uploader_Date
+				  ,Inst_Id
+				  ,Form_Code
+				  ,Encrypt_Type
+				  ,Pass_Key
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{fileName,jdbcType=VARCHAR}
+				  ,#{suffix,jdbcType=VARCHAR}
+				  ,#{formId,jdbcType=INTEGER}
+				  ,#{filePath,jdbcType=VARCHAR}
+				  ,#{fileVersion,jdbcType=INTEGER}
+				  ,#{uploader,jdbcType=VARCHAR}
+				  ,#{uploaderId,jdbcType=INTEGER}
+				  ,#{uploaderDate,jdbcType=TIMESTAMP}
+				  ,#{instId,jdbcType=INTEGER}
+				  ,#{formCode,jdbcType=INTEGER}
+				  ,#{encryptType,jdbcType=INTEGER}
+				  ,#{passKey,jdbcType=VARCHAR}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="FlowAttachFileDomain">
+    update pf_flow_attachfile 
+                 set     id=id  
+   						<if test="fileName!=null"  >,<![CDATA[ File_Name=#{fileName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="suffix!=null"  >,<![CDATA[ Suffix=#{suffix,jdbcType=VARCHAR}# ]]></if>
+   						<if test="formId!=null"  >,<![CDATA[ Form_Id=#{formId,jdbcType=INTEGER}# ]]></if>
+   						<if test="filePath!=null"  >,<![CDATA[ File_Path=#{filePath,jdbcType=VARCHAR}# ]]></if>
+   						<if test="fileVersion!=null"  >,<![CDATA[ File_Version=#{fileVersion,jdbcType=INTEGER}# ]]></if>
+   						<if test="uploader!=null"  >,<![CDATA[ Uploader=#{uploader,jdbcType=VARCHAR}# ]]></if>
+   						<if test="uploaderId!=null"  >,<![CDATA[ Uploader_Id=#{uploaderId,jdbcType=INTEGER}# ]]></if>
+   						<if test="uploaderDate!=null"  >,<![CDATA[ Uploader_Date=#{uploaderDate,jdbcType=TIMESTAMP}# ]]></if>
+   						<if test="instId!=null"  >,<![CDATA[ Inst_Id=#{instId,jdbcType=INTEGER}# ]]></if>
+   						<if test="formCode!=null"  >,<![CDATA[ Form_Code=#{formCode,jdbcType=INTEGER}# ]]></if>
+   						<if test="encryptType!=null"  >,<![CDATA[ Encrypt_Type=#{encryptType,jdbcType=INTEGER}# ]]></if>
+   						<if test="passKey!=null"  >,<![CDATA[ Pass_Key=#{passKey,jdbcType=VARCHAR}# ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_flow_attachfile    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>
+

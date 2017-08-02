@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandUser.mapper.PermissionRelationMapper">
+  <resultMap id="result" type="com.ohand.ohandUser.domain.PermissionRelationDomain">
+      <result property="id" column="Id" />
+      <result property="permissionItemId" column="Permission_Item_Id" />
+      <result property="permissionItemName" column="Permission_Item_Name" />
+      <result property="recordId" column="Record_Id" />
+      <result property="recordName" column="Record_Name" />
+      <result property="userId" column="User_Id" />
+      <result property="userName" column="User_Name" />
+      <result property="cType" column="c_Type" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Permission_Item_Id
+				  ,Permission_Item_Name
+				  ,Record_Id
+				  ,Record_Name
+				  ,User_Id
+				  ,User_Name
+				  ,c_Type
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="permissionItemId != null"> AND permission_Item_Id = #{permissionItemId,jdbcType=INTEGER}  		</if>
+		<if test="permissionItemName != null"> AND Permission_Item_Name like  #{permissionItemName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="recordId != null"> AND record_Id = #{recordId,jdbcType=INTEGER}  		</if>
+		<if test="recordName != null"> AND record_Name like  #{recordName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="userId != null"> AND User_Id = #{userId,jdbcType=INTEGER}  		</if>
+		<if test="userName != null"> AND user_Name like  #{userName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="cType != null"> AND c_Type = #{cType,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}   #{ascOrDesc} </when>
+			 <otherwise>   order by 	 Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_permission_relation  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_permission_relation    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_permission_relation   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_permission_relation    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_permission_relation    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="PermissionRelationDomain">
+    insert into pf_permission_relation
+                   (   
+				  Id
+				  ,Permission_Item_Id
+				  ,Permission_Item_Name
+				  ,Record_Id
+				  ,Record_Name
+				  ,User_Id
+				  ,User_Name
+				  ,c_Type
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{permissionItemId,jdbcType=INTEGER}
+				  ,#{permissionItemName,jdbcType=VARCHAR}
+				  ,#{recordId,jdbcType=INTEGER}
+				  ,#{recordName,jdbcType=VARCHAR}
+				  ,#{userId,jdbcType=INTEGER}
+				  ,#{userName,jdbcType=VARCHAR}
+				  ,#{cType,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="PermissionRelationDomain">
+    update pf_permission_relation 
+                 set     id=id  
+   						<if test="permissionItemId!=null"  >,<![CDATA[ Permission_Item_Id=#{permissionItemId,jdbcType=INTEGER}# ]]></if>
+   						<if test="permissionItemName!=null"  >,<![CDATA[ Permission_Item_Name=#{permissionItemName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="recordId!=null"  >,<![CDATA[ Record_Id=#{recordId,jdbcType=INTEGER}# ]]></if>
+   						<if test="recordName!=null"  >,<![CDATA[ Record_Name=#{recordName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="userId!=null"  >,<![CDATA[ User_Id=#{userId,jdbcType=INTEGER}# ]]></if>
+   						<if test="userName!=null"  >,<![CDATA[ User_Name=#{userName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="cType!=null"  >,<![CDATA[ c_Type=#{cType,jdbcType=INTEGER}# ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_permission_relation    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+  <delete id="deleteObjectByPermissionItemId" parameterType="int" >
+    DELETE FROM pf_permission_relation    WHERE Permission_Item_Id= #{permissionItemId,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>

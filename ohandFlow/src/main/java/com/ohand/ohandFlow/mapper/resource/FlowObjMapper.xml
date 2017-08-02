@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.FlowObjMapper">
+	<select id="getFlowObjListCommon" parameterType="FlowObjDomain"
+		resultType="FlowObjDomain">
+		SELECT *
+		FROM pf_flow_obj
+		WHERE NAME =
+		#{name}
+	</select>
+	<insert id="insertObject" parameterType="FlowObjDomain">
+		INSERT INTO
+		pf_flow_obj
+		(	id ,
+			flow_name  ,
+			flow_code ,
+			creator_Id ,
+			creator ,
+			create_date ,
+			flow_version ,
+			last_version ,
+			binding_version ,
+			is_last_version ,
+			is_binding_version ,
+			flow_path ,
+			flow_des,
+			flow_categoryId,
+			uuid
+		)
+		VALUES
+		(	#{id}, 
+			#{flowName ,  jdbcType=VARCHAR },
+			#{flowCode ,  jdbcType=INTEGER },
+			#{creatorId ,jdbcType=INTEGER},
+			#{creator,jdbcType=INTEGER},
+			#{createDate,jdbcType=TIMESTAMP},
+			#{flowVersion ,jdbcType=INTEGER},
+			#{lastVersion ,jdbcType=INTEGER},
+			#{bindingVersion ,jdbcType=INTEGER},
+			#{isLastVersion ,jdbcType=INTEGER},
+			#{isBindingVersion ,jdbcType=INTEGER},
+			#{flowPath ,  jdbcType=VARCHAR }, 
+			#{flowDes ,  jdbcType=VARCHAR }, 
+			#{flowCategoryId ,jdbcType=INTEGER},
+			#{uuid ,jdbcType=VARCHAR}
+		)
+	</insert>
+	<resultMap id="result"
+		type="com.ohand.ohandFlow.domain.FlowObjDomain">
+		<result property="id" column="Id" />
+		<result property="flowName" column="flow_Name" />
+		<result property="flowCode" column="flow_Code" />
+		<result property="creatorId" column="creator_Id" />
+		<result property="creator" column="creator" />
+		<result property="createDate" column="create_Date" />
+		<result property="flowVersion" column="flow_Version" />
+		<result property="lastVersion" column="last_Version" />
+		<result property="bindingVersion" column="binding_Version" />
+		<result property="isLastVersion" column="is_Last_Version" />
+		<result property="isBindingVersion" column="is_Binding_Version" />
+		<result property="flowPath" column="flow_Path" />
+		<result property="flowDes" column="flow_Des" />
+		<result property="flowCategoryId" column="flow_CategoryId" />
+		<result property="uuid" column="uuid" />
+	</resultMap>
+	<sql id="tableColumn"> 
+				Id,
+				flow_name,
+				flow_code,
+				creator_Id,
+				creator,
+				last_version,
+				binding_Version,
+				is_binding_version,
+				create_date,
+				flow_version,
+				is_last_version,
+				flow_path,
+				flow_des,
+				flow_categoryId,
+				uuid	
+	</sql>
+	<sql id="dynamicCondition"> 
+			<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+			<if test="flowName != null"> AND flow_Name like #{flowName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="flowCode != null"> AND flow_Code = #{flowCode,jdbcType=INTEGER} </if>
+			<if test="creatorId != null"> AND creator_Id = #{id,jdbcType=INTEGER} </if>
+			<if test="creator != null"> AND creator like  #{creator , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="createDate != null"> AND create_Date  = #{createDate,jdbcType=TIMESTAMP}  	</if>
+			<if test="gtcreateDate != null"> <![CDATA[  AND create_Date  >= #{gtcreateDate,jdbcType=TIMESTAMP} ]]>	 </if>
+			<if test="ltcreateDate != null">  <![CDATA[   AND create_Date <= #{ltcreateDate,jdbcType=TIMESTAMP} ]]>	 </if>
+			<if test="flowVersion != null"> AND flow_Version = #{flowVersion,jdbcType=INTEGER} </if>
+			<if test="lastVersion != null"> AND last_Version = #{lastVersion,jdbcType=INTEGER} </if>
+			<if test="bindingVersion != null"> AND binding_Version = #{bindingVersion,jdbcType=INTEGER} </if>
+			<if test="isLastVersion != null"> AND is_Last_Version  = #{isLastVersion,jdbcType=INTEGER}  		</if>
+			<if test="isBindingVersion != null"> AND is_Binding_Version  = #{isBindingVersion,jdbcType=INTEGER}  		</if>
+			<if test="flowPath != null"> AND flow_Path like  #{flowPath , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="flowDes != null"> AND flow_Des like  #{flowDes , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="flowCategoryId != null"> AND flow_CategoryId = #{flowCategoryId,jdbcType=INTEGER}  		</if>	
+			<if test="uuid != null"> AND uuid like  #{uuid , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+	</sql>	
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}   #{ascOrDesc} </when>
+			 <otherwise>   order by 	 Id	desc  	</otherwise>
+		</choose>
+	</sql>
+	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_flow_obj 
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			*
+		FROM pf_flow_obj  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			*
+		FROM pf_flow_obj  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_flow_obj 
+		WHERE 1=1 
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+		count(1) numb
+		FROM pf_flow_obj 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+	
+	<select id="getMaxNextFlowCode" parameterType="java.util.Map"
+		resultType="hashmap">
+		select  max(flow_code) +1 numb  from pf_flow_obj
+	</select>
+	
+	<select id="getObjectVOListTreePagination" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			*
+		FROM pf_flow_obj 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>
+	<select id="getObjectVOListTreeCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+		count(1) numb
+		FROM pf_flow_obj 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>
+	
+	<update id="updateObject" parameterType="FlowObjDomain">
+		UPDATE pf_flow_obj  SET id=id 
+			<if test="flowName != null"> , flow_Name = #{flowName,jdbcType=VARCHAR}  		</if>
+			<if test="flowCode != null"> , flow_Code = #{flowCode,jdbcType=INTEGER}  		</if>
+			<if test="creatorId != null"> , creator_Id = #{creatorId,jdbcType=INTEGER}  		</if>
+			<if test="creator != null"> , creator  = #{creator,jdbcType=VARCHAR}  	</if>
+			<if test="flowVersion != null"> , flow_Version  =  #{flowVersion,jdbcType=INTEGER}  	</if>
+			<if test="lastVersion != null"> , last_Version  =  #{lastVersion,jdbcType=INTEGER}  	</if>
+			<if test="bindingVersion != null"> , binding_Version  =  #{bindingVersion,jdbcType=INTEGER}  	</if>
+			<if test="isLastVersion != null"> , is_Last_Version  =  #{isLastVersion,jdbcType=INTEGER}  	</if>
+			<if test="isBindingVersion != null"> , is_Binding_Version  =  #{isBindingVersion,jdbcType=INTEGER}  	</if>
+			<if test="flowPath != null"> , flow_Path = #{flowPath,jdbcType=VARCHAR}  		</if>			
+			<if test="flowDes != null"> , flow_Des = #{flowDes,jdbcType=VARCHAR}  		</if>
+			<if test="flowCategoryId != null"> , flow_CategoryId  =  #{flowCategoryId,jdbcType=INTEGER}  	</if>
+			<if test="uuid != null"> , uuid  =  #{uuid,jdbcType=INTEGER}  	</if>
+	    WHERE Id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="createTable" parameterType="FlowObjDomain" statementType="STATEMENT">
+		${createTableSql}
+	</update>
+	
+	<select id="isExistsTableName" parameterType="java.util.Map"
+		resultType="int">
+		<choose> 
+			<when test="dbType == 'oracle'"> 
+				select count(1) from user_all_tables where table_name=#{tableName,jdbcType=VARCHAR}
+			</when>
+			<when test="dbType == 'mysql'"> 
+				SELECT COUNT(1) FROM INFORMATION_SCHEMA.TABLES  where TABLE_SCHEMA="hgesavjzxtuzobnpwcxb" 
+					and  table_name=#{tableName,jdbcType=VARCHAR}
+			</when>
+			<otherwise> 
+				
+			</otherwise> 
+		</choose>
+	</select>
+	
+	<delete  id="deleteObjectById" parameterType="int" >
+		DELETE FROM pf_flow_obj   WHERE ID= #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<delete  id="deleteObjectByFlowCode" parameterType="int" >
+		DELETE FROM pf_flow_obj   WHERE flow_Code= #{flowCode,jdbcType=INTEGER}
+	</delete>
+	
+	
+	
+	
+	
+	
+
+  	<select id="getSequence" parameterType="com.ohand.ohandFlow.domain.Sequence" resultType="com.ohand.ohandFlow.domain.Sequence">
+		SELECT name, nextId
+		FROM t_pm_sequence
+		WHERE NAME = #{name}
+	</select>
+	
+	<select id="getMaxId" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+		max(id) numb
+		FROM t_pm_sequence 
+	</select>	
+	
+	<update id="updateSequence" parameterType="com.ohand.ohandFlow.domain.Sequence">
+		UPDATE t_pm_sequence
+		SET
+		nextId = #{nextId}
+		WHERE NAME = #{name}
+	</update>
+	
+	<insert id="insertSquence" parameterType="com.ohand.ohandFlow.domain.Sequence">
+		INSERT INTO
+		t_pm_sequence
+		(	id ,
+			name, 
+			nextId
+		)
+		VALUES
+		(	#{id}, 
+			#{name},
+			#{nextId}
+		)
+	</insert>	
+	
+	
+	
+	
+	
+		
+</mapper>

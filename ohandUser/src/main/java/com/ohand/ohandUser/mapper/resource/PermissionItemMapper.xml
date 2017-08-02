@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandUser.mapper.PermissionItemMapper">
+  <resultMap id="result" type="com.ohand.ohandUser.domain.tree.PermissionItemTreeGridVO">
+      <result property="id" column="Id" />
+      <result property="resName" column="Res_Name" />
+      <result property="moduleName" column="Module_Name" />
+      <result property="resCode" column="Res_Code" />
+      <result property="isRight" column="Is_Right" />
+      <result property="parentId" column="Parent_Id" />
+      <result property="description" column="Description" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Res_Name
+				  ,Module_Name
+				  ,Res_Code
+				  ,Is_Right
+				  ,Parent_Id
+				  ,Description
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="eqResName"> AND res_Name=#{resName,jdbcType=VARCHAR}</if>
+		<if test="resName"> AND res_Name like  #{resName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback}</if>
+		<if test="eqModuleName"> AND module_Name=#{moduleName,jdbcType=VARCHAR}</if>
+		<if test="eqResCode"> AND res_Code=#{resCode,jdbcType=VARCHAR}</if>
+		<if test="isRight != null"> AND is_Right = #{isRight,jdbcType=INTEGER}  		</if>
+		<if test="parentId != null"> AND parent_Id = #{parentId,jdbcType=INTEGER}  		</if>
+		<if test="description != null"> AND description like  #{description , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}   #{ascOrDesc} </when>
+			 <otherwise>   order by 	 Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_permission_item  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_permission_item    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_permission_item   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_permission_item    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_permission_item    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+	
+	<select id="getObjectVOListTreePagination" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+		*
+		FROM pf_permission_item  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+	<select id="getObjectVOListTreeCount" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+		count(1) numb
+		FROM pf_permission_item 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+	
+ <insert id="insertObject" parameterType="PermissionItemDomain">
+    insert into pf_permission_item
+                   (   
+				  Id
+				  ,Res_Name
+				  ,Module_Name
+				  ,Res_Code
+				  ,Is_Right
+				  ,Parent_Id
+				  ,Description
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{resName,jdbcType=VARCHAR}
+				  ,#{moduleName,jdbcType=VARCHAR}
+				  ,#{resCode,jdbcType=VARCHAR}
+				  ,#{isRight,jdbcType=INTEGER}
+				  ,#{parentId,jdbcType=INTEGER}
+				  ,#{description,jdbcType=VARCHAR}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="PermissionItemDomain">
+    update pf_permission_item 
+                 set     id=id  
+   						<if test="resName!=null"  >,<![CDATA[ Res_Name=#{resName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="moduleName!=null"  >,<![CDATA[ Module_Name=#{moduleName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="resCode!=null"  >,<![CDATA[ Res_Code=#{resCode,jdbcType=VARCHAR}# ]]></if>
+   						<if test="isRight!=null"  >,<![CDATA[ Is_Right=#{isRight,jdbcType=INTEGER}# ]]></if>
+   						<if test="parentId!=null"  >,<![CDATA[ Parent_Id=#{parentId,jdbcType=INTEGER}# ]]></if>
+   						<if test="description!=null"  >,<![CDATA[ Description=#{description,jdbcType=VARCHAR}# ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_permission_item    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>
+

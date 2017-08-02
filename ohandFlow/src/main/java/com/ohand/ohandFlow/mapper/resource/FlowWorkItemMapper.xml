@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohand.ohandFlow.mapper.FlowWorkItemMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.FlowWorkItemDomain">
+      <result property="id" column="Id" />
+      <result property="rId" column="rId" />
+      <result property="title" column="title" />
+      <result property="flowId" column="Flow_Id" />
+      <result property="flowCode" column="flow_Code" />
+      <result property="flowName" column="Flow_Name" />
+      <result property="formId" column="form_Id" />
+      <result property="formCode" column="form_Code" />
+      <result property="formName" column="Form_Name" />
+      <result property="flowInstId" column="Flow_Inst_Id" />
+      <result property="createDate" column="Create_Date" />
+      <result property="status" column="Status" />
+      <result property="sender" column="Sender" />
+      <result property="senderId" column="Sender_Id" />
+      <result property="receiver" column="Receiver" />
+      <result property="receiverId" column="Receiver_Id" />
+      <result property="sourceType" column="Source_Type" />
+      <result property="readDate" column="Read_Date" />
+      <result property="dealDate" column="Deal_Date" />
+      <result property="activityId" column="activity_Id" />
+      <result property="activityName" column="activity_Name" />
+      <result property="activityType" column="activity_Type" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,rId
+				  ,title
+				  ,Flow_Id
+				  ,Flow_Name
+				  ,Flow_Inst_Id
+				  ,Create_Date
+				  ,Status
+				  ,Sender
+				  ,Sender_Id
+				  ,Receiver
+				  ,Receiver_Id
+				  ,Source_Type
+				  ,Read_Date
+				  ,Deal_Date
+				  ,activity_Id
+				  ,activity_Name
+				  ,activity_Type
+				  ,flow_code
+				  ,form_Id
+				  ,form_code
+				  ,form_name
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="rId != null"> AND rId = #{rId,jdbcType=INTEGER}  		</if>
+		<if test="flowId != null"> AND flow_Id = #{flowId,jdbcType=INTEGER}  		</if>
+		<if test="flowCode != null"> AND flow_Code = #{flowCode,jdbcType=INTEGER}  		</if>
+		<if test="title != null"> AND title like #{title , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="flowName != null"> AND flow_Name like #{flowName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="formId != null"> AND form_Id = #{formId,jdbcType=INTEGER}  		</if>
+		<if test="formCode != null"> AND form_Code = #{formCode,jdbcType=INTEGER}  		</if>
+		<if test="formName != null"> AND form_Name like #{formName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="flowInstId != null"> AND flow_Inst_Id = #{flowInstId,jdbcType=INTEGER}  		</if>
+		<if test="createDate != null"> AND create_Date = #{createDate,jdbcType=TIMESTAMP}  		</if>
+		<if test="status != null"> AND status = #{status,jdbcType=INTEGER}  		</if>
+		<if test="sender != null"> AND sender like #{sender , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="senderId != null"> AND sender_Id = #{senderId,jdbcType=INTEGER}  		</if>
+		<if test="receiver != null"> AND receiver like #{receiver , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="receiverId != null"> AND receiver_Id = #{receiverId,jdbcType=INTEGER}  		</if>
+		<if test="sourceType != null"> AND source_Type = #{sourceType,jdbcType=INTEGER}  		</if>
+		<if test="readDate != null"> AND read_Date = #{readDate,jdbcType=TIMESTAMP}  		</if>
+		<if test="dealDate != null"> AND deal_Date = #{dealDate,jdbcType=TIMESTAMP}  		</if>
+		<if test="activityId != null"> AND activity_Id = #{activityId,jdbcType=INTEGER}  		</if>
+		<if test="activityType != null"> AND activity_Type = #{activityType,jdbcType=INTEGER}  		</if>
+		<if test="activityName != null"> AND activity_Name like #{activityName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+  		<if test="unCompleteWorkItem != null"> 
+  			AND status in 
+  			<foreach collection="unCompleteWorkItem" item="status" index="index"
+	             open="(" close=")" separator=",">
+	             #{status}
+         	</foreach>
+           AND (
+           	EXISTS ( select Id from pf_flow_inst where id=pf_flow_workitem.Flow_Inst_Id )
+           ) 
+  		</if>
+  	</sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}  	#{AscOrDesc} 	</when>
+			 <otherwise>   order by Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_flow_workitem  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_flow_workitem  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_flow_workitem   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_flow_workitem    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		  order by id desc 
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_flow_workitem   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="FlowWorkItemDomain">
+    insert into pf_flow_workitem
+                   (   
+				   Id
+				  ,rId
+				  ,title
+				  ,Flow_Id
+				  ,flow_Code
+				  ,Flow_Name
+				  ,form_Id
+				  ,form_code
+				  ,form_name
+				  ,Flow_Inst_Id
+				  ,Create_Date
+				  ,Status
+				  ,Sender
+				  ,Sender_Id
+				  ,Receiver
+				  ,Receiver_Id
+				  ,Source_Type
+				  ,Read_Date
+				  ,Deal_Date
+				  ,activity_Id
+				  ,activity_Name
+				  ,activity_Type
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{rId,jdbcType=INTEGER}
+				  ,#{title,jdbcType=VARCHAR}
+				  ,#{flowId,jdbcType=INTEGER}
+				  ,#{flowCode,jdbcType=INTEGER}
+				  ,#{flowName,jdbcType=VARCHAR}
+				  ,#{formId,jdbcType=INTEGER}
+				  ,#{formCode,jdbcType=INTEGER}
+				  ,#{formName,jdbcType=VARCHAR}
+				  ,#{flowInstId,jdbcType=INTEGER}
+				  ,#{createDate,jdbcType=TIMESTAMP}
+				  ,#{status,jdbcType=INTEGER}
+				  ,#{sender,jdbcType=VARCHAR}
+				  ,#{senderId,jdbcType=INTEGER}
+				  ,#{receiver,jdbcType=VARCHAR}
+				  ,#{receiverId,jdbcType=INTEGER}
+				  ,#{sourceType,jdbcType=INTEGER}
+				  ,#{readDate,jdbcType=TIMESTAMP}
+				  ,#{dealDate,jdbcType=TIMESTAMP}
+				  ,#{activityId,jdbcType=INTEGER}
+				  ,#{activityName,jdbcType=VARCHAR}
+				  ,#{activityType,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="FlowWorkItemDomain">
+    update pf_flow_workitem 
+                 set     id=id  
+   						<if test="flowId!=null"  >,<![CDATA[ Flow_Id=#{flowId,jdbcType=INTEGER} ]]></if>
+   						<if test="rId!=null"  >,<![CDATA[ rId=#{rId,jdbcType=INTEGER} ]]></if>
+   						<if test="title!=null"  >,<![CDATA[ title=#{title,jdbcType=VARCHAR} ]]></if>
+   						<if test="flowCode!=null"  >,<![CDATA[ flow_Code=#{flowCode,jdbcType=INTEGER} ]]></if>   						
+   						<if test="flowName!=null"  >,<![CDATA[ Flow_Name=#{flowName,jdbcType=VARCHAR} ]]></if>
+   						<if test="formId!=null"  >,<![CDATA[ form_Id=#{formId,jdbcType=INTEGER} ]]></if>
+   						<if test="formCode!=null"  >,<![CDATA[ form_Code=#{formCode,jdbcType=INTEGER} ]]></if>   						
+   						<if test="formName!=null"  >,<![CDATA[ form_Name=#{formName,jdbcType=VARCHAR} ]]></if>
+   						<if test="flowInstId!=null"  >,<![CDATA[ Flow_Inst_Id=#{flowInstId,jdbcType=INTEGER} ]]></if>
+   						<if test="createDate!=null"  >,<![CDATA[ Create_Date=#{createDate,jdbcType=TIMESTAMP} ]]></if>
+   						<if test="status!=null"  >,<![CDATA[ Status=#{status,jdbcType=INTEGER} ]]></if>
+   						<if test="sender!=null"  >,<![CDATA[ Sender=#{sender,jdbcType=VARCHAR} ]]></if>
+   						<if test="senderId!=null"  >,<![CDATA[ Sender_Id=#{senderId,jdbcType=INTEGER} ]]></if>
+   						<if test="receiver!=null"  >,<![CDATA[ Receiver=#{receiver,jdbcType=VARCHAR} ]]></if>
+   						<if test="receiverId!=null"  >,<![CDATA[ Receiver_Id=#{receiverId,jdbcType=INTEGER} ]]></if>
+   						<if test="sourceType!=null"  >,<![CDATA[ Source_Type=#{sourceType,jdbcType=INTEGER} ]]></if>
+   						<if test="readDate!=null"  >,<![CDATA[ Read_Date=#{readDate,jdbcType=TIMESTAMP} ]]></if>
+   						<if test="dealDate!=null"  >,<![CDATA[ Deal_Date=#{dealDate,jdbcType=TIMESTAMP} ]]></if>
+ 				   		<if test="activityId!=null"  >,<![CDATA[ activity_Id=#{activityId,jdbcType=INTEGER} ]]></if>
+   						<if test="activityName!=null"  >,<![CDATA[ activity_Name=#{activityName,jdbcType=VARCHAR} ]]></if>
+   						<if test="activityType!=null"  >,<![CDATA[ activity_Type=#{activityType,jdbcType=INTEGER} ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_flow_workitem    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+  
+</mapper>
+

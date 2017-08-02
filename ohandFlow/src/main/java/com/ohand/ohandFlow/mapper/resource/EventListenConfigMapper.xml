@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.EventListenConfigMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.EventListenConfigDomain">
+      <result property="id" column="Id" />
+      <result property="queueName" column="Queue_Name" />
+      <result property="listenerClass" column="Listener_Class" />
+      <result property="queueClass" column="Queue_Class" />
+      <result property="isUseThread" column="Is_Use_Thread" />
+      <result property="isOpen" column="Is_Open" />
+      <result property="eDescription" column="E_Description" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Queue_Name
+				  ,Listener_Class
+				  ,Queue_Class
+				  ,Is_Use_Thread
+				  ,Is_Open
+				  ,E_Description
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="queueName != null"> AND Queue_Name =#{queueName,jdbcType=VARCHAR} </if>
+		<if test="listenerClass != null"> AND Listener_Class =#{listenerClass,jdbcType=VARCHAR} </if>
+		<if test="queueClass != null"> AND Queue_Class =#{queueClass,jdbcType=VARCHAR} </if>
+		<if test="isUseThread != null"> AND Is_Use_Thread = #{isUseThread,jdbcType=INTEGER}  		</if>
+		<if test="isOpen != null"> AND Is_Open = #{isOpen,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<if test="orderByField != null"> order by #{orderByField}  		</if>
+		<if test="id != null"> order by 	 Id	desc  		</if>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_event_listen_config  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_event_listen_config    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_event_listen_config   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_event_listen_config    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_event_listen_config    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="EventListenConfigDomain">
+    insert into pf_event_listen_config
+                   (   
+				  Id
+				  ,Queue_Name
+				  ,Listener_Class
+				  ,Queue_Class
+				  ,Is_Use_Thread
+				  ,Is_Open
+				  ,E_Description
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{queueName,jdbcType=VARCHAR}
+				  ,#{listenerClass,jdbcType=VARCHAR}
+				  ,#{queueClass,jdbcType=VARCHAR}
+				  ,#{isUseThread,jdbcType=INTEGER}
+				  ,#{isOpen,jdbcType=INTEGER}
+				  ,#{eDescription,jdbcType=VARCHAR}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="EventListenConfigDomain">
+    update pf_event_listen_config 
+                 set     id=id  
+   						<if test="queueName!=null"  >,<![CDATA[ Queue_Name=#{queueName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="listenerClass!=null"  >,<![CDATA[ Listener_Class=#{listenerClass,jdbcType=VARCHAR}# ]]></if>
+   						<if test="queueClass!=null"  >,<![CDATA[ Queue_Class=#{queueClass,jdbcType=VARCHAR}# ]]></if>
+   						<if test="isUseThread!=null"  >,<![CDATA[ Is_Use_Thread=#{isUseThread,jdbcType=INTEGER}# ]]></if>
+   						<if test="isOpen!=null"  >,<![CDATA[ Is_Open=#{isOpen,jdbcType=INTEGER}# ]]></if>
+   						<if test="eDescription!=null"  >,<![CDATA[ E_Description=#{eDescription,jdbcType=VARCHAR}# ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_event_listen_config    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>
+

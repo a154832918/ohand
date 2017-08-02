@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.FormElementMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.FormElementDomain">
+      <result property="id" column="Id" />
+      <result property="formId" column="Form_Id" />
+      <result property="formName" column="Form_Name" />
+      <result property="elementCode" column="Element_Code" />
+      <result property="elementType" column="Element_Type" />
+      <result property="elementName" column="Element_Name" />
+      <result property="isEnable" column="Is_Enable" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Form_Id
+				  ,Form_Name
+				  ,Element_Code
+				  ,Element_Type
+				  ,Element_Name
+				  ,Is_Enable
+  </sql>
+  <sql id="dynamicCondition">  
+	  	<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+	  	<if test="formId != null"> AND form_Id = #{formId,jdbcType=INTEGER}  		</if>
+		<if test="formName != null"> AND form_Name like #{formName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="elementType != null"> AND element_Type = #{elementType,jdbcType=INTEGER}  		</if>
+		<if test="elementCode != null"> AND element_Code like #{elementCode , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="elementName != null"> AND element_Name like #{elementName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+	  	<if test="isEnable != null"> AND is_Enable = #{isEnable,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<if test="orderByField != null"> order by #{orderByField}  		</if>
+		<if test="id != null"> order by 	 Id	desc  		</if>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_form_element  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_form_element  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_element  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_element  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_form_element  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="FormElementDomain">
+    insert into pf_form_element
+                   (   
+				  Id
+				  ,Form_Id
+				  ,Form_Name
+				  ,Element_Code
+				  ,Element_Name
+				  ,Is_Enable
+				  ,element_Type
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{formId,jdbcType=INTEGER}
+				  ,#{formName,jdbcType=VARCHAR}
+				  ,#{elementCode,jdbcType=VARCHAR}
+				  ,#{elementName,jdbcType=VARCHAR}
+				  ,#{isEnable,jdbcType=INTEGER}
+				  ,#{elementType,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="FormElementDomain">
+    update pf_form_element 
+                 set     id=id  
+   						<if test="formId!=null"  >,<![CDATA[ Form_Id=#{formId,jdbcType=INTEGER} ]]></if>
+   						<if test="elementType!=null"  >,<![CDATA[ element_Type=#{elementType,jdbcType=INTEGER} ]]></if>
+   						<if test="formName!=null"  >,<![CDATA[ Form_Name=#{formName,jdbcType=VARCHAR} ]]></if>
+   						<if test="elementCode!=null"  >,<![CDATA[ Element_Code=#{elementCode,jdbcType=VARCHAR} ]]></if>
+   						<if test="elementName!=null"  >,<![CDATA[ Element_Name=#{elementName,jdbcType=VARCHAR} ]]></if>
+   						<if test="isEnable!=null"  >,<![CDATA[ Is_Enable=#{isEnable,jdbcType=INTEGER} ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_form_element    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+  
+</mapper>
+

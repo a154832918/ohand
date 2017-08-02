@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.FormPluginObjMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.FormPluginObjDomain">
+      <result property="id" column="Id" />
+      <result property="pluginName" column="Plugin_Name" />
+      <result property="pluginCode" column="Plugin_Code" />
+      <result property="creatorId" column="Creator_Id" />
+      <result property="creator" column="Creator" />
+      <result property="createDate" column="Create_Date" />
+      <result property="pluginVersion" column="Plugin_Version" />
+      <result property="isLastVersion" column="Is_Last_Version" />
+      <result property="pluginPath" column="Plugin_Path" />
+      <result property="pluginDes" column="Plugin_Des" />
+      <result property="formCode" column="Form_Code" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Plugin_Name
+				  ,Plugin_Code
+				  ,Creator_Id
+				  ,Creator
+				  ,Create_Date
+				  ,Plugin_Version
+				  ,Is_Last_Version
+				  ,Plugin_Path
+				  ,Plugin_Des
+				  ,Form_Code
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="pluginName != null"> AND plugin_Name like #{pluginName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="pluginCode != null"> AND plugin_Code = #{pluginCode,jdbcType=INTEGER}  		</if>
+		<if test="creatorId != null"> AND creator_Id = #{creatorId,jdbcType=INTEGER}  		</if>
+		<if test="creator != null"> AND creator like #{creator , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="createDate != null"> AND create_Date = #{createDate,jdbcType=TIMESTAMP}  		</if>
+		<if test="pluginVersion != null"> AND plugin_Version = #{pluginVersion,jdbcType=INTEGER}  		</if>
+		<if test="isLastVersion != null"> AND is_Last_Version = #{isLastVersion,jdbcType=INTEGER}  		</if>
+		<if test="pluginPath != null"> AND plugin_Path = #{pluginPath,jdbcType=VARCHAR}  		</if>
+		<if test="pluginDes != null"> AND plugin_Des like #{pluginDes , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="formCode != null"> AND form_Code = #{formCode,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<if test="orderByField != null"> order by #{orderByField}  		</if>
+		<if test="id != null"> order by 	 Id	desc  		</if>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_form_plugin_obj  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_form_plugin_obj    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_plugin_obj   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_plugin_obj    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_form_plugin_obj    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="FormPluginObjDomain">
+    insert into pf_form_plugin_obj
+                   (   
+				  Id
+				  ,Plugin_Name
+				  ,Plugin_Code
+				  ,Creator_Id
+				  ,Creator
+				  ,Create_Date
+				  ,Plugin_Version
+				  ,Is_Last_Version
+				  ,Plugin_Path
+				  ,Plugin_Des
+				  ,Form_Code
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{pluginName,jdbcType=VARCHAR}
+				  ,#{pluginCode,jdbcType=INTEGER}
+				  ,#{creatorId,jdbcType=INTEGER}
+				  ,#{creator,jdbcType=VARCHAR}
+				  ,#{createDate,jdbcType=TIMESTAMP}
+				  ,#{pluginVersion,jdbcType=INTEGER}
+				  ,#{isLastVersion,jdbcType=INTEGER}
+				  ,#{pluginPath,jdbcType=VARCHAR}
+				  ,#{pluginDes,jdbcType=VARCHAR}
+				  ,#{formCode,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="FormPluginObjDomain">
+    update pf_form_plugin_obj 
+                 set     id=id  
+   						<if test="pluginName!=null"  >,<![CDATA[ Plugin_Name=#{pluginName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="pluginCode!=null"  >,<![CDATA[ Plugin_Code=#{pluginCode,jdbcType=INTEGER}# ]]></if>
+   						<if test="creatorId!=null"  >,<![CDATA[ Creator_Id=#{creatorId,jdbcType=INTEGER}# ]]></if>
+   						<if test="creator!=null"  >,<![CDATA[ Creator=#{creator,jdbcType=VARCHAR}# ]]></if>
+   						<if test="createDate!=null"  >,<![CDATA[ Create_Date=#{createDate,jdbcType=TIMESTAMP}# ]]></if>
+   						<if test="pluginVersion!=null"  >,<![CDATA[ Plugin_Version=#{pluginVersion,jdbcType=INTEGER}# ]]></if>
+   						<if test="isLastVersion!=null"  >,<![CDATA[ Is_Last_Version=#{isLastVersion,jdbcType=INTEGER}# ]]></if>
+   						<if test="pluginPath!=null"  >,<![CDATA[ Plugin_Path=#{pluginPath,jdbcType=VARCHAR}# ]]></if>
+   						<if test="pluginDes!=null"  >,<![CDATA[ Plugin_Des=#{pluginDes,jdbcType=VARCHAR}# ]]></if>
+   						<if test="formCode!=null"  >,<![CDATA[ Form_Code=#{formCode,jdbcType=INTEGER}# ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_form_plugin_obj    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+  
+</mapper>

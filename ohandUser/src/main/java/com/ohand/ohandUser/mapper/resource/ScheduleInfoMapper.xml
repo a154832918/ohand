@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohand.ohandUser.mapper.ScheduleInfoMapper">
+  <resultMap id="result" type="com.ohand.ohandUser.domain.ScheduleInfoDomain">
+      <result property="id" column="Id" />
+      <result property="scheduleName" column="Schedule_Name" />
+      <result property="deadline" column="Deadline" />
+      <result property="remindTime" column="Remind_Time" />
+      <result property="businessId" column="Business_Id" />
+      <result property="scheduleType" column="Schedule_Type" />
+      <result property="emergencyDegree" column="Emergency_Degree" />
+      <result property="createDepart" column="Create_Depart" />
+      <result property="createDepartId" column="Create_Depart_Id" />
+      <result property="userId" column="User_Id" />
+      <result property="completion" column="Completion" />
+      <result property="contentUrl" column="Content_Url" />
+      <result property="remark" column="Remark" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Schedule_Name
+				  ,Deadline
+				  ,Remind_Time
+				  ,Business_Id
+				  ,Schedule_Type
+				  ,Emergency_Degree
+				  ,Create_Depart
+				  ,Create_Depart_Id
+				  ,User_Id
+				  ,Completion
+				  ,Content_Url
+				  ,Remark
+  </sql>
+  <sql id="dynamicCondition"> 
+  		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="scheduleName != null"> AND schedule_Name like #{scheduleName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+  		<if test="deadline != null"> AND deadline  = #{deadline,jdbcType=TIMESTAMP}  	</if>
+  		<if test="remindTime != null"> AND Remind_Time  = #{remindTime,jdbcType=TIMESTAMP}  	</if>
+  		<if test="gtRemindTime != null"> <![CDATA[ AND Remind_Time  >= #{gtRemindTime,jdbcType=TIMESTAMP} ]]>  	</if>
+  		<if test="ltRemindTime != null"> <![CDATA[ AND Remind_Time  <= #{ltRemindTime,jdbcType=TIMESTAMP}  ]]> 	</if>
+		<if test="businessId != null"> AND Business_Id like #{businessId , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="scheduleType != null"> AND schedule_Type like #{scheduleType , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+   		<if test="emergencyDegree != null"> AND Emergency_Degree = #{emergencyDegree,jdbcType=INTEGER}  		</if>
+   		<if test="createDepartId != null"> AND Create_Depart_Id = #{createDepartId,jdbcType=INTEGER}  		</if>
+		<if test="createDepart != null"> AND Create_Depart like #{createDepart , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+   		<if test="userId != null"> AND user_Id = #{userId,jdbcType=INTEGER}  		</if>
+		<if test="completion != null"> AND completion = #{completion,jdbcType=INTEGER}  		</if>
+		<if test="remark != null"> AND remark like #{remark , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}   #{ascOrDesc} </when>
+			 <otherwise>   order by 	 Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_schedule_info  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_schedule_info    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_schedule_info   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_schedule_info    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_schedule_info    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="ScheduleInfoDomain">
+    insert into pf_schedule_info
+                   (   
+				  Id
+				  ,Schedule_Name
+				  ,Deadline
+				  ,Remind_Time
+				  ,Business_Id
+				  ,Schedule_Type
+				  ,Emergency_Degree
+				  ,Create_Depart
+				  ,Create_Depart_Id
+				  ,User_Id
+				  ,Completion
+				  ,Content_Url
+				  ,Remark
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{scheduleName,jdbcType=VARCHAR}
+				  ,#{deadline,jdbcType=TIMESTAMP}
+				  ,#{remindTime,jdbcType=TIMESTAMP}
+				  ,#{businessId,jdbcType=VARCHAR}
+				  ,#{scheduleType,jdbcType=VARCHAR}
+				  ,#{emergencyDegree,jdbcType=INTEGER}
+				  ,#{createDepart,jdbcType=VARCHAR}
+				  ,#{createDepartId,jdbcType=INTEGER}
+				  ,#{userId,jdbcType=INTEGER}
+				  ,#{completion,jdbcType=INTEGER}
+				  ,#{contentUrl,jdbcType=VARCHAR}
+				  ,#{remark,jdbcType=VARCHAR}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="ScheduleInfoDomain">
+    update pf_schedule_info 
+                 set     id=id  
+   						<if test="scheduleName!=null"  >,<![CDATA[ Schedule_Name=#{scheduleName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="deadline!=null"  >,<![CDATA[ Deadline=#{deadline,jdbcType=TIMESTAMP}# ]]></if>
+   						<if test="remindTime!=null"  >,<![CDATA[ Remind_Time=#{remindTime,jdbcType=TIMESTAMP}# ]]></if>
+   						<if test="businessId!=null"  >,<![CDATA[ Business_Id=#{businessId,jdbcType=VARCHAR}# ]]></if>
+   						<if test="scheduleType!=null"  >,<![CDATA[ Schedule_Type=#{scheduleType,jdbcType=VARCHAR}# ]]></if>
+   						<if test="emergencyDegree!=null"  >,<![CDATA[ Emergency_Degree=#{emergencyDegree,jdbcType=INTEGER}# ]]></if>
+   						<if test="createDepart!=null"  >,<![CDATA[ Create_Depart=#{createDepart,jdbcType=VARCHAR}# ]]></if>
+   						<if test="createDepartId!=null"  >,<![CDATA[ Create_Depart_Id=#{createDepartId,jdbcType=INTEGER}# ]]></if>
+   						<if test="userId!=null"  >,<![CDATA[ User_Id=#{userId,jdbcType=INTEGER}# ]]></if>
+   						<if test="completion!=null"  >,<![CDATA[ Completion=#{completion,jdbcType=INTEGER}# ]]></if>
+   						<if test="contentUrl!=null"  >,<![CDATA[ Content_Url=#{contentUrl,jdbcType=VARCHAR}# ]]></if>
+   						<if test="remark!=null"  >,<![CDATA[ Remark=#{remark,jdbcType=VARCHAR}# ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_schedule_info    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>

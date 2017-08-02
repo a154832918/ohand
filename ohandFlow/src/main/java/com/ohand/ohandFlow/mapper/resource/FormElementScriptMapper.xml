@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.FormElementScriptMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.FormElementScriptDomain">
+      <result property="id" column="Id" />
+      <result property="elementUuid" column="element_Uuid" />
+      <result property="scriptContent" column="script_Content" />
+      <result property="createTime" column="create_Time" />
+      <result property="isLast" column="is_Last" />
+      <result property="formId" column="form_id" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,element_Uuid
+				  ,script_Content
+				  ,create_Time
+				  ,is_Last
+				  ,form_id
+  </sql>
+  <sql id="dynamicCondition">  
+	  	<if test="id != null"> AND id = #{id,jdbcType=VARCHAR}  		</if>
+	  	<if test="elementUuid != null"> AND element_Uuid = #{elementUuid,jdbcType=VARCHAR}  		</if>
+	  	<if test="scriptContent != null"> AND script_Content = #{scriptContent,jdbcType=VARCHAR}  		</if>
+	  	<if test="createTime != null"> AND create_Time = #{createTime,jdbcType=TIMESTAMP}  		</if>
+		<if test="isLast != null"> AND is_Last = #{isLast,jdbcType=INTEGER}  		</if>
+		<if test="formId != null"> AND form_Id = #{formId,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<if test="orderByField != null"> order by #{orderByField}  		</if>
+		<if test="id != null"> order by 	 Id	desc  		</if>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_form_element_script  
+		WHERE ID= #{id,jdbcType=VARCHAR}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_form_element_script  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_element_script  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_element_script  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+			count(1) numb
+		FROM pf_form_element_script  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="FormElementScriptDomain">
+    insert into pf_form_element_script
+                   (   
+				  Id
+				  ,element_Uuid
+				  ,script_Content
+				  ,create_Time
+				  ,is_Last
+				  ,form_Id
+                   )
+            values (
+				  #{id,jdbcType=VARCHAR}
+				  ,#{elementUuid,jdbcType=VARCHAR}
+				  ,#{scriptContent,jdbcType=VARCHAR}
+				  ,#{createTime,jdbcType=TIMESTAMP}
+				  ,#{isLast,jdbcType=INTEGER}
+				  ,#{formId,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="FormElementScriptDomain">
+    update pf_form_element_script 
+                 set     id=id  
+   						<if test="elementUuid!=null"  >,<![CDATA[ element_Uuid=#{elementUuid,jdbcType=VARCHAR} ]]></if>
+   						<if test="scriptContent!=null"  >,<![CDATA[ script_Content=#{scriptContent,jdbcType=VARCHAR} ]]></if>
+   						<if test="createTime!=null"  >,<![CDATA[ create_Time=#{createTime,jdbcType=TIMESTAMP} ]]></if>
+   						<if test="isLast!=null"  >,<![CDATA[ is_Last=#{isLast,jdbcType=INTEGER} ]]></if>
+   						<if test="formId!=null"  >,<![CDATA[ form_Id=#{formId,jdbcType=INTEGER} ]]></if>
+ 				WHERE Id = #{id,jdbcType=VARCHAR} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_form_element_script    WHERE ID= #{id,jdbcType=VARCHAR}
+  </delete> 
+ 
+</mapper>

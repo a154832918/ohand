@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandUser.mapper.CommonMapper">
+  <resultMap id="result" type="com.ohand.ohandUser.domain.CommonDomain">
+      <result property="id" column="Id" />
+      <result property="recordId" column="Record_Id" />
+      <result property="name" column="Name" />
+      <result property="sourceType" column="Source_Type" />
+      <result property="parentId" column="Parent_Id" />
+      <result property="description" column="Description" />
+      <result property="priority" column="Priority" />
+      <result property="sysbol" column="Sysbol" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Record_Id
+				  ,Name
+				  ,Source_Type
+				  ,Parent_Id
+				  ,Description
+				  ,Priority
+				  ,Sysbol
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="commonIds != null"> 
+			AND id in 
+ 			 <foreach collection="commonIds" item="status" index="index"
+	             open="(" close=")" separator=",">
+	             #{status}
+         	</foreach>
+		</if>
+		<if test="recordId != null"> AND record_Id = #{recordId,jdbcType=INTEGER}  		</if>
+		<if test="name != null"> AND name like #{name , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="sourceType != null"> AND source_Type = #{sourceType,jdbcType=INTEGER}  		</if>
+		<if test="noSourceType != null"> AND source_Type != #{noSourceType,jdbcType=INTEGER}  		</if>
+		<if test="parentId != null"> AND parent_Id = #{parentId,jdbcType=INTEGER}  		</if>
+		<if test="description != null"> AND description like #{description , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="priority != null"> AND priority = #{priority,jdbcType=INTEGER}  		</if>
+		<if test="sysbol != null"> AND sysbol = #{sysbol,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}  	#{AscOrDesc} 	</when>
+			 <otherwise>   order by Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_common  
+		WHERE ID=#{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_common  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_common  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_common  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_common  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="CommonDomain">
+    insert into pf_common
+                   (   
+				  Id
+				  ,Record_Id
+				  ,Name
+				  ,Source_Type
+				  ,Parent_Id
+				  ,Description
+				  ,Priority
+				  ,Sysbol
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{recordId,jdbcType=INTEGER}
+				  ,#{name,jdbcType=VARCHAR}
+				  ,#{sourceType,jdbcType=INTEGER}
+				  ,#{parentId,jdbcType=INTEGER}
+				  ,#{description,jdbcType=VARCHAR}
+				  ,#{priority,jdbcType=INTEGER}
+				  ,#{sysbol,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="CommonDomain">
+    update pf_common 
+                 set     id=id  
+   						<if test="recordId!=null"  >,<![CDATA[ Record_Id=#{recordId,jdbcType=INTEGER} ]]></if>
+   						<if test="name!=null"  >,<![CDATA[ Name=#{name,jdbcType=VARCHAR} ]]></if>
+   						<if test="sourceType!=null"  >,<![CDATA[ Source_Type=#{sourceType,jdbcType=INTEGER} ]]></if>
+   						<if test="parentId!=null"  >,<![CDATA[ Parent_Id=#{parentId,jdbcType=INTEGER} ]]></if>
+   						<if test="description!=null"  >,<![CDATA[ Description=#{description,jdbcType=VARCHAR} ]]></if>
+   						<if test="priority!=null"  >,<![CDATA[ Priority=#{priority,jdbcType=INTEGER} ]]></if>
+   						<if test="sysbol!=null"  >,<![CDATA[ Sysbol=#{sysbol,jdbcType=INTEGER} ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update> 
+  
+   <update id="updateObjectName" parameterType="java.util.Map">
+    update pf_common 
+                 set     name=<![CDATA[ #{name,jdbcType=VARCHAR} ]]>  
+ 				WHERE 
+ 					Record_Id = <![CDATA[ #{recordId,jdbcType=INTEGER} ]]>
+ 					 and  
+ 					source_Type = <![CDATA[ #{sourceType,jdbcType=INTEGER} ]]>
+ 				
+  </update>  
+   
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_common  WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+  <delete id="deleteObjectByRecordIdAndParentId" parameterType="java.util.Map" >
+		DELETE FROM pf_common    WHERE 1=1 
+			AND record_Id = #{recordId,jdbcType=INTEGER}  
+			AND source_Type = #{sourceType,jdbcType=INTEGER}  
+			AND parent_Id = #{parentId,jdbcType=INTEGER}  	 
+	</delete>
+	
+	<delete id="deleteObjectByParentIdAndSourceType" parameterType="java.util.Map" >
+		DELETE FROM pf_common    WHERE 1=1 
+			AND source_Type = #{sourceType,jdbcType=INTEGER}  
+			AND parent_Id = #{parentId,jdbcType=INTEGER}  	 
+	</delete>
+
+	<delete id="deleteObjectByRecordId" parameterType="java.util.Map" >
+		DELETE FROM pf_common    WHERE 1=1 
+			AND source_Type = #{sourceType,jdbcType=INTEGER}  
+			AND record_Id = #{recordId,jdbcType=INTEGER}  	 
+	</delete>
+
+</mapper>
+

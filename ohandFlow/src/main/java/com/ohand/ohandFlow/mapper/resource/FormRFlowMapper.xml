@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.FormRFlowMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.FormRFlowDomain">
+      <result property="id" column="Id" />
+      <result property="formId" column="Form_Id" />
+      <result property="formName" column="Form_Name" />
+      <result property="formCode" column="Form_Code" />
+      <result property="flowId" column="Flow_Id" />
+      <result property="flowName" column="Flow_Name" />
+      <result property="flowCode" column="flow_Code" />
+      <result property="publishVersion" column="publish_Version" />
+      <result property="isPublishVersion" column="is_Publish_Version" />
+  </resultMap>
+  
+   <resultMap id="resultCategory" type="com.ohand.ohandFlow.domain.FormRFlowDomain">
+      <result property="id" column="Id" />
+      <result property="formId" column="Form_Id" />
+      <result property="formName" column="Form_Name" />
+      <result property="formCode" column="Form_Code" />
+      <result property="flowId" column="Flow_Id" />
+      <result property="flowName" column="Flow_Name" />
+      <result property="flowCode" column="flow_Code" />
+      <result property="publishVersion" column="publish_Version" />
+      <result property="flowCategoryId" column="Flow_CategoryId" />
+      <result property="flowCategoryName" column="Flow_CategoryName" />
+  </resultMap>
+  
+  <sql id="tableColumn"> 
+				  Id
+				  ,Form_Id
+				  ,Form_Name
+				  ,Form_Code
+				  ,Flow_Id
+				  ,Flow_Name
+				  ,Flow_Code
+				  ,publish_Version
+				  ,is_Publish_Version
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>		
+		<if test="formId != null"> AND form_Id = #{formId,jdbcType=INTEGER}  		</if>		
+		<if test="formName != null"> AND form_Name like #{formName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="formCode != null"> AND form_Code = #{formCode,jdbcType=INTEGER}  		</if>		
+		<if test="flowId != null"> AND flow_Id = #{flowId,jdbcType=INTEGER}  		</if>		
+		<if test="flowName != null"> AND flow_Name like #{flowName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="flowCode != null"> AND flow_Code = #{flowCode,jdbcType=INTEGER}  		</if>	
+		<if test="publishVersion != null"> AND publish_Version = #{publishVersion,jdbcType=INTEGER}  		</if>	
+		<if test="isPublishVersion != null"> AND is_Publish_Version = #{isPublishVersion,jdbcType=INTEGER}  		</if>		
+  </sql>
+	<sql id="orderByFragment">
+		<if test="orderByField != null"> order by #{orderByField}  		</if>
+		<if test="id != null"> order by 	 Id	desc  		</if>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_form_r_flow  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_form_r_flow  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	 <select id="getObjectMapGroupByFormCode" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) c ,form_code
+		FROM 	pf_form_r_flow  
+		WHERE 1=1 and  flow_Code = #{flowCode,jdbcType=INTEGER}   	
+			group by form_code 
+	 </select>
+	 
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_r_flow  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	
+	<select id="missiveTemplate" parameterType="java.util.Map"
+		resultMap="resultCategory">
+		
+		select r.* ,c.Id Flow_CategoryId, c.Show_Name Flow_CategoryName
+		 	from pf_form_r_flow r , pf_flow_obj f , pf_flow_category c
+ 			WHERE r.Is_Publish_Version=1 AND r.Flow_Id=f.Id and f.Flow_CategoryId=c.Id 
+			order by f.Flow_CategoryId desc 
+			
+	</select>	
+	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_r_flow  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+			count(1) numb
+		FROM pf_form_r_flow  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="FormRFlowDomain">
+    insert into pf_form_r_flow
+                   (   
+				  Id
+				  ,Form_Id
+				  ,Form_Name
+				  ,Form_Code
+				  ,Flow_Id
+				  ,Flow_Name
+				  ,Flow_Code
+				  ,publish_Version
+				  ,is_Publish_Version
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{formId,jdbcType=INTEGER}
+				  ,#{formName,jdbcType=VARCHAR}
+				  ,#{formCode,jdbcType=INTEGER}
+				  ,#{flowId,jdbcType=INTEGER}
+				  ,#{flowName,jdbcType=VARCHAR}
+				  ,#{flowCode,jdbcType=INTEGER}
+				  ,#{publishVersion,jdbcType=INTEGER}
+				  ,#{isPublishVersion,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="FormRFlowDomain">
+    update pf_form_r_flow 
+                 set     id=id  
+   						<if test="formId!=null"  >,<![CDATA[ Form_Id=#{formId,jdbcType=INTEGER} ]]></if>
+   						<if test="formName!=null"  >,<![CDATA[ Form_Name=#{formName,jdbcType=VARCHAR} ]]></if>
+   						<if test="formCode!=null"  >,<![CDATA[ Form_Code=#{formCode,jdbcType=INTEGER} ]]></if>
+   						<if test="flowId!=null"  >,<![CDATA[ Flow_Id=#{flowId,jdbcType=INTEGER} ]]></if>
+   						<if test="flowName!=null"  >,<![CDATA[ Flow_Name=#{flowName,jdbcType=VARCHAR} ]]></if>
+   						<if test="flowCode!=null"  >,<![CDATA[ Flow_Code=#{flowCode,jdbcType=INTEGER} ]]></if>
+   						<if test="publishVersion!=null"  >,<![CDATA[ publish_Version=#{publishVersion,jdbcType=INTEGER} ]]></if>
+   						<if test="isPublishVersion!=null"  >,<![CDATA[ is_Publish_Version=#{isPublishVersion,jdbcType=INTEGER} ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_form_r_flow    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+  <delete id="deleteObjectByFormCode" parameterType="int" >
+    	DELETE FROM pf_form_r_flow    WHERE Form_Code= #{formCode,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>
+

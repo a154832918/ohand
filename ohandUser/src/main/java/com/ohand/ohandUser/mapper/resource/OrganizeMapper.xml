@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandUser.mapper.OrganizeMapper">
+   <resultMap id="resultTree" type="com.ohand.ohandUser.domain.tree.OrganizeTreeGridVO">
+      <result property="id" column="Id" />
+      <result property="recordId" column="Record_Id" />
+      <result property="name" column="Name" />
+      <result property="sourceType" column="Source_Type" />
+      <result property="parentId" column="Parent_Id" />
+      <result property="description" column="Description" />
+      <result property="priority" column="Priority" />
+      <result property="sysbol" column="Sysbol" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Record_Id
+				  ,Name
+				  ,Source_Type
+				  ,Parent_Id
+				  ,Description
+				  ,Priority
+				  ,Sysbol
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="recordId != null"> AND record_Id = #{recordId,jdbcType=INTEGER}  		</if>
+		<if test="name != null"> AND name like #{name , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="sourceType != null"> AND source_Type = #{sourceType,jdbcType=INTEGER}  		</if>
+		<if test="parentId != null"> AND parent_Id = #{parentId,jdbcType=INTEGER}  		</if>
+		<if test="description != null"> AND description like #{description , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="priority != null"> AND priority = #{priority,jdbcType=INTEGER}  		</if>
+		<if test="sysbol != null"> AND sysbol like #{sysbol , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+  	</sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}  	#{AscOrDesc} 	</when>
+			 <otherwise>   order by Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="resultTree">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_organize  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_organize  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="resultTree">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_organize  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultMap="resultTree">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_organize  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_organize  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="OrganizeDomain">
+    insert into pf_organize
+                   (   
+				  Id
+				  ,Record_Id
+				  ,Name
+				  ,Source_Type
+				  ,Parent_Id
+				  ,Description
+				  ,Priority
+				  ,Sysbol
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{recordId,jdbcType=INTEGER}
+				  ,#{name,jdbcType=VARCHAR}
+				  ,#{sourceType,jdbcType=INTEGER}
+				  ,#{parentId,jdbcType=INTEGER}
+				  ,#{description,jdbcType=VARCHAR}
+				  ,#{priority,jdbcType=INTEGER}
+				  ,#{sysbol,jdbcType=VARCHAR}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="OrganizeDomain">
+    update pf_organize 
+                 set     id=id  
+   						<if test="recordId!=null"  >,<![CDATA[ Record_Id=#{recordId,jdbcType=INTEGER} ]]></if>
+   						<if test="name!=null"  >,<![CDATA[ Name=#{name,jdbcType=VARCHAR} ]]></if>
+   						<if test="sourceType!=null"  >,<![CDATA[ Source_Type=#{sourceType,jdbcType=INTEGER} ]]></if>
+   						<if test="parentId!=null"  >,<![CDATA[ Parent_Id=#{parentId,jdbcType=INTEGER} ]]></if>
+   						<if test="description!=null"  >,<![CDATA[ Description=#{description,jdbcType=VARCHAR} ]]></if>
+   						<if test="priority!=null"  >,<![CDATA[ Priority=#{priority,jdbcType=INTEGER} ]]></if>
+   						<if test="sysbol!=null"  >,<![CDATA[ Sysbol=#{sysbol,jdbcType=VARCHAR} ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_organize    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>
+

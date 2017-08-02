@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandUser.mapper.TemplateConfigMapper">
+  <resultMap id="result" type="com.ohand.ohandUser.domain.TemplateConfigDomain">
+      <result property="id" column="Id" />
+      <result property="templateUuid" column="Template_Uuid" />
+      <result property="templatePath" column="Template_Path" />
+      <result property="versionNo" column="Version_No" />
+      <result property="uploadDate" column="Upload_Date" />
+      <result property="suffix" column="Suffix" />
+      <result property="fileName" column="File_Name" />
+      <result property="isLastVersion" column="is_Last_Version" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Template_Uuid
+				  ,Template_Path
+				  ,Version_No
+				  ,Upload_Date
+				  ,Suffix
+				  ,File_Name
+				  ,is_Last_Version
+  </sql>
+  <sql id="dynamicCondition">  
+  		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="templateUuid != null"> AND template_Uuid = #{templateUuid,jdbcType=VARCHAR}   </if>
+  		<if test="templatePath != null"> AND template_Path = #{templatePath,jdbcType=VARCHAR}   </if>
+  		<if test="versionNo != null"> AND version_No = #{versionNo,jdbcType=INTEGER}  		</if>
+  		<if test="uploadDate != null"> AND upload_Date  = #{uploadDate,jdbcType=TIMESTAMP}  	</if>
+  		<if test="suffix != null"> AND suffix = #{suffix,jdbcType=VARCHAR}   </if>
+  		<if test="eqFileName != null"> AND file_Name = #{eqFileName,jdbcType=VARCHAR}   </if>
+  		<if test="fileName != null"> AND file_Name like #{fileName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback}  </if>
+  		<if test="isLastVersion != null"> AND is_Last_Version = #{isLastVersion,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}   #{ascOrDesc} </when>
+			 <otherwise>   order by 	 Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		Pf_Template_Config  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	Pf_Template_Config    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM Pf_Template_Config   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM Pf_Template_Config    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM Pf_Template_Config    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="TemplateConfigDomain">
+    insert into Pf_Template_Config
+                   (   
+				  Id
+				  ,Template_Uuid
+				  ,Template_Path
+				  ,Version_No
+				  ,Upload_Date
+				  ,Suffix
+				  ,File_Name
+				  ,is_Last_Version
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{templateUuid,jdbcType=VARCHAR}
+				  ,#{templatePath,jdbcType=VARCHAR}
+				  ,#{versionNo,jdbcType=INTEGER}
+				  ,#{uploadDate,jdbcType=TIMESTAMP}
+				  ,#{suffix,jdbcType=VARCHAR}
+				  ,#{fileName,jdbcType=VARCHAR}
+				  ,#{isLastVersion,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="TemplateConfigDomain">
+    update Pf_Template_Config 
+                 set     id=id  
+   						<if test="templateUuid!=null"  >,<![CDATA[ Template_Uuid=#{templateUuid,jdbcType=VARCHAR}# ]]></if>
+   						<if test="templatePath!=null"  >,<![CDATA[ Template_Path=#{templatePath,jdbcType=VARCHAR}# ]]></if>
+   						<if test="versionNo!=null"  >,<![CDATA[ Version_No=#{versionNo,jdbcType=INTEGER}# ]]></if>
+   						<if test="uploadDate!=null"  >,<![CDATA[ Upload_Date=#{uploadDate,jdbcType=TIMESTAMP}# ]]></if>
+   						<if test="suffix!=null"  >,<![CDATA[ Suffix=#{suffix,jdbcType=VARCHAR}# ]]></if>
+   						<if test="fileName!=null"  >,<![CDATA[ File_Name=#{fileName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="isLastVersion!=null"  >,<![CDATA[ is_Last_Version=#{isLastVersion,jdbcType=INTEGER}# ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM Pf_Template_Config  WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>

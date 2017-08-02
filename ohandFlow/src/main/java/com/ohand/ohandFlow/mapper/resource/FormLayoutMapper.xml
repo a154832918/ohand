@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.FormLayoutMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.FormLayoutDomain">
+      <result property="id" column="Id" />
+      <result property="formId" column="form_Id" />
+      <result property="formCode" column="form_Code" />
+      <result property="layoutType" column="layout_Type" />
+      <result property="layoutUuid" column="layout_Uuid" />
+      <result property="layoutAttr" column="layout_Attr" />
+     <result property="layoutContent" column="layout_Content" />
+     <result property="title" column="title" />
+     <result property="parentUuid" column="parent_Uuid" />
+     <result property="seq" column="seq" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,form_Id
+				  ,form_Code
+				  ,layout_Type
+				  ,layout_Uuid
+				  ,layout_Attr
+				  ,layout_Content
+				  ,title
+				  ,parent_Uuid
+				  ,seq
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="formId != null"> AND form_Id = #{formId,jdbcType=INTEGER}  		</if>
+		<if test="formCode != null"> AND form_Code = #{formCode,jdbcType=INTEGER}  		</if>
+		<if test="layoutType != null"> AND layout_Type = #{layoutType,jdbcType=INTEGER}  		</if>
+		<if test="layoutUuid != null"> AND layout_Uuid like #{layoutUuid , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="layoutAttr != null"> AND layout_Attr like #{layoutAttr , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="title != null"> AND title like #{title , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="parentUuid != null"> AND parent_Uuid like #{parentUuid , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="seq != null"> AND seq = #{seq,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<if test="orderByField != null"> order by #{orderByField}  #{ascOrDesc} 		</if>
+		<if test="id != null"> order by 	 seq	asc  		</if>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_form_layout  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_form_layout    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_layout   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_layout    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_form_layout    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="FormLayoutDomain">
+    insert into pf_form_layout
+                   (   
+				  Id
+				  ,form_Id
+				  ,form_Code
+				  ,layout_Type
+				  ,layout_Uuid
+				  ,layout_Attr
+				  ,layout_Content
+				  ,title
+				  ,parent_Uuid
+				  ,seq
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{formId,jdbcType=INTEGER}
+				  ,#{formCode,jdbcType=INTEGER}
+				  ,#{layoutType,jdbcType=INTEGER}
+				  ,#{layoutUuid,jdbcType=VARCHAR}
+				  ,#{layoutAttr,jdbcType=VARCHAR}
+				  ,#{layoutContent,jdbcType=VARCHAR}
+				  ,#{title,jdbcType=VARCHAR}
+				  ,#{parentUuid,jdbcType=VARCHAR}
+				  ,#{seq,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="FormLayoutDomain">
+    update pf_form_layout 
+                 set     id=id  
+   						<if test="formId!=null"  >,<![CDATA[ form_Id=#{formId,jdbcType=INTEGER} ]]></if>
+   						<if test="formCode!=null"  >,<![CDATA[ form_Code=#{formCode,jdbcType=INTEGER} ]]></if>
+   						<if test="layoutType!=null"  >,<![CDATA[ layout_Type=#{layoutType,jdbcType=INTEGER} ]]></if>
+   						<if test="layoutUuid!=null"  >,<![CDATA[ layout_Uuid=#{layoutUuid,jdbcType=VARCHAR} ]]></if>
+   						<if test="layoutAttr!=null"  >,<![CDATA[ layout_Attr=#{layoutAttr,jdbcType=VARCHAR} ]]></if>
+   						<if test="layoutContent!=null"  >,<![CDATA[ layout_Content=#{layoutContent,jdbcType=VARCHAR} ]]></if>
+   						<if test="title!=null"  >,<![CDATA[ title=#{title,jdbcType=VARCHAR} ]]></if>
+   						<if test="parentUuid!=null"  >,<![CDATA[ parent_Uuid=#{parentUuid,jdbcType=VARCHAR} ]]></if>
+   						<if test="seq!=null"  >,<![CDATA[ seq=#{seq,jdbcType=INTEGER} ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_form_layout    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+   <delete id="deleteObjectByLayoutUuid" parameterType="java.util.Map" >
+    	DELETE FROM pf_form_layout  
+    	  WHERE layout_Uuid=#{layoutUuid,jdbcType=VARCHAR} 
+    	  		and form_Id=#{formId,jdbcType=INTEGER}
+  </delete> 
+  
+</mapper>

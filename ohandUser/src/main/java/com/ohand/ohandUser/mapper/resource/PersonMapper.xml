@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandUser.mapper.PersonMapper">
+  <resultMap id="result" type="com.ohand.ohandUser.domain.PersonDomain">
+      <result property="id" column="Id" />
+      <result property="personCode" column="Person_Code" />
+      <result property="gender" column="Gender" />
+      <result property="nickName" column="Nick_Name" />
+      <result property="cardNo" column="Card_No" />
+      <result property="chineseName" column="Chinese_Name" />
+      <result property="engName" column="Eng_Name" />
+      <result property="oldName" column="Old_Name" />
+      <result property="nationality" column="Nationality" />
+      <result property="zipCode" column="Zip_Code" />
+      <result property="age" column="Age" />
+      <result property="birthday" column="Birthday" />
+      <result property="mobile" column="Mobile" />
+      <result property="telHome" column="Tel_Home" />
+      <result property="telOffice" column="Tel_Office" />
+      <result property="knowledgeCode" column="Knowledge_Code" />
+      <result property="email" column="Email" />
+      <result property="homeAddress" column="Home_Address" />
+      <result property="province" column="Province" />
+      <result property="city" column="City" />
+      <result property="area" column="Area" />
+      <result property="addrEdtail" column="Addr_Edtail" />
+      <result property="presentAddress" column="Present_Address" />
+      <result property="memo" column="Memo" />
+      <result property="personStatus" column="Person_Status" />
+      <result property="baseFlag" column="Base_Flag" />
+      <result property="deleteFlag" column="Delete_Flag" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Person_Code
+				  ,Gender
+				  ,Nick_Name
+				  ,Card_No
+				  ,Chinese_Name
+				  ,Eng_Name
+				  ,Old_Name
+				  ,Nationality
+				  ,Zip_Code
+				  ,Age
+				  ,Birthday
+				  ,Mobile
+				  ,Tel_Home
+				  ,Tel_Office
+				  ,Knowledge_Code
+				  ,Email
+				  ,Home_Address
+				  ,Province
+				  ,City
+				  ,Area
+				  ,Addr_Edtail
+				  ,Present_Address
+				  ,Memo
+				  ,Person_Status
+				  ,Base_Flag
+				  ,Delete_Flag
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="personCode != null"> AND person_Code like #{personCode , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="gender != null"> AND gender = #{gender,jdbcType=INTEGER}  		</if>
+		<if test="eqPersonCode != null"> AND person_Code = #{eqPersonCode,jdbcType=VARCHAR}  		</if>
+		
+		
+		<if test="nickName != null"> AND nick_Name like #{nickName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="cardNo != null"> AND card_No like #{cardNo , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="chineseName != null"> AND chinese_Name like #{chineseName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="engName != null"> AND eng_Name like #{engName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="oldName != null"> AND old_Name like #{oldName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="nationality != null"> AND nationality like #{nationality , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="zipCode != null"> AND zip_Code like #{zipCode , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="age != null"> AND age = #{age,jdbcType=INTEGER}  		</if>
+		<if test="birthday != null"> AND birthday  = #{birthday,jdbcType=TIMESTAMP}  	</if>
+		<if test="mobile != null"> AND mobile like #{mobile , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="telHome != null"> AND tel_Home like #{telHome , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="telOffice != null"> AND tel_Office like #{telOffice , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="knowledgeCode != null"> AND knowledge_Code like #{knowledgeCode , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="email != null"> AND email like #{email , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="homeAddress != null"> AND home_Address like #{homeAddress , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="province != null"> AND province like #{province , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="city != null"> AND city like #{city , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="area != null"> AND area like #{area , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="addrEdtail != null"> AND addr_Edtail #{addrEdtail , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="presentAddress != null"> AND present_Address #{presentAddress , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="memo != null"> AND memo #{memo , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="personStatus != null"> AND person_Status = #{personStatus,jdbcType=INTEGER}  		</if>
+		<if test="baseFlag != null"> AND base_Flag = #{baseFlag,jdbcType=INTEGER}  		</if>
+		<if test="deleteFlag != null"> AND delete_Flag = #{deleteFlag,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}   #{ascOrDesc} </when>
+			 <otherwise>   order by 	 Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_person  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_person  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_person  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_person  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_person  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="PersonDomain">
+    insert into pf_person
+                   (   
+				  Id
+				  ,Person_Code
+				  ,Gender
+				  ,Nick_Name
+				  ,Card_No
+				  ,Chinese_Name
+				  ,Eng_Name
+				  ,Old_Name
+				  ,Nationality
+				  ,Zip_Code
+				  ,Age
+				  ,Birthday
+				  ,Mobile
+				  ,Tel_Home
+				  ,Tel_Office
+				  ,Knowledge_Code
+				  ,Email
+				  ,Home_Address
+				  ,Province
+				  ,City
+				  ,Area
+				  ,Addr_Edtail
+				  ,Present_Address
+				  ,Memo
+				  ,Person_Status
+				  ,Base_Flag
+				  ,Delete_Flag
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{personCode,jdbcType=VARCHAR}
+				  ,#{gender,jdbcType=INTEGER}
+				  ,#{nickName,jdbcType=VARCHAR}
+				  ,#{cardNo,jdbcType=VARCHAR}
+				  ,#{chineseName,jdbcType=VARCHAR}
+				  ,#{engName,jdbcType=VARCHAR}
+				  ,#{oldName,jdbcType=VARCHAR}
+				  ,#{nationality,jdbcType=VARCHAR}
+				  ,#{zipCode,jdbcType=VARCHAR}
+				  ,#{age,jdbcType=INTEGER}
+				  ,#{birthday,jdbcType=TIMESTAMP}
+				  ,#{mobile,jdbcType=VARCHAR}
+				  ,#{telHome,jdbcType=VARCHAR}
+				  ,#{telOffice,jdbcType=VARCHAR}
+				  ,#{knowledgeCode,jdbcType=VARCHAR}
+				  ,#{email,jdbcType=VARCHAR}
+				  ,#{homeAddress,jdbcType=VARCHAR}
+				  ,#{province,jdbcType=VARCHAR}
+				  ,#{city,jdbcType=VARCHAR}
+				  ,#{area,jdbcType=VARCHAR}
+				  ,#{addrEdtail,jdbcType=VARCHAR}
+				  ,#{presentAddress,jdbcType=VARCHAR}
+				  ,#{memo,jdbcType=VARCHAR}
+				  ,#{personStatus,jdbcType=INTEGER}
+				  ,#{baseFlag,jdbcType=INTEGER}
+				  ,#{deleteFlag,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="PersonDomain">
+    update pf_person 
+                 set     id=id  
+   						<if test="personCode!=null"  >,<![CDATA[ Person_Code=#{personCode,jdbcType=VARCHAR} ]]></if>
+   						<if test="gender!=null"  >,<![CDATA[ Gender=#{gender,jdbcType=INTEGER} ]]></if>
+   						<if test="nickName!=null"  >,<![CDATA[ Nick_Name=#{nickName,jdbcType=VARCHAR} ]]></if>
+   						<if test="cardNo!=null"  >,<![CDATA[ Card_No=#{cardNo,jdbcType=VARCHAR} ]]></if>
+   						<if test="chineseName!=null"  >,<![CDATA[ Chinese_Name=#{chineseName,jdbcType=VARCHAR} ]]></if>
+   						<if test="engName!=null"  >,<![CDATA[ Eng_Name=#{engName,jdbcType=VARCHAR} ]]></if>
+   						<if test="oldName!=null"  >,<![CDATA[ Old_Name=#{oldName,jdbcType=VARCHAR} ]]></if>
+   						<if test="nationality!=null"  >,<![CDATA[ Nationality=#{nationality,jdbcType=VARCHAR} ]]></if>
+   						<if test="zipCode!=null"  >,<![CDATA[ Zip_Code=#{zipCode,jdbcType=VARCHAR} ]]></if>
+   						<if test="age!=null"  >,<![CDATA[ Age=#{age,jdbcType=INTEGER} ]]></if>
+   						<if test="birthday!=null"  >,<![CDATA[ Birthday=#{birthday,jdbcType=TIMESTAMP} ]]></if>
+   						<if test="mobile!=null"  >,<![CDATA[ Mobile=#{mobile,jdbcType=VARCHAR} ]]></if>
+   						<if test="telHome!=null"  >,<![CDATA[ Tel_Home=#{telHome,jdbcType=VARCHAR} ]]></if>
+   						<if test="telOffice!=null"  >,<![CDATA[ Tel_Office=#{telOffice,jdbcType=VARCHAR} ]]></if>
+   						<if test="knowledgeCode!=null"  >,<![CDATA[ Knowledge_Code=#{knowledgeCode,jdbcType=VARCHAR} ]]></if>
+   						<if test="email!=null"  >,<![CDATA[ Email=#{email,jdbcType=VARCHAR} ]]></if>
+   						<if test="homeAddress!=null"  >,<![CDATA[ Home_Address=#{homeAddress,jdbcType=VARCHAR} ]]></if>
+   						<if test="province!=null"  >,<![CDATA[ Province=#{province,jdbcType=VARCHAR} ]]></if>
+   						<if test="city!=null"  >,<![CDATA[ City=#{city,jdbcType=VARCHAR} ]]></if>
+   						<if test="area!=null"  >,<![CDATA[ Area=#{area,jdbcType=VARCHAR} ]]></if>
+   						<if test="addrEdtail!=null"  >,<![CDATA[ Addr_Edtail=#{addrEdtail,jdbcType=VARCHAR} ]]></if>
+   						<if test="presentAddress!=null"  >,<![CDATA[ Present_Address=#{presentAddress,jdbcType=VARCHAR} ]]></if>
+   						<if test="memo!=null"  >,<![CDATA[ Memo=#{memo,jdbcType=VARCHAR} ]]></if>
+   						<if test="personStatus!=null"  >,<![CDATA[ Person_Status=#{personStatus,jdbcType=INTEGER} ]]></if>
+   						<if test="baseFlag!=null"  >,<![CDATA[ Base_Flag=#{baseFlag,jdbcType=INTEGER} ]]></if>
+   						<if test="deleteFlag!=null"  >,<![CDATA[ Delete_Flag=#{deleteFlag,jdbcType=INTEGER} ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_person    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>
+

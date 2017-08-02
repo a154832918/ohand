@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.ohand.ohandFlow.mapper.FlowActivityMapper">
+	<select id="getFlowActivityListCommon" parameterType="FlowActivityDomain"
+		resultType="FlowActivityDomain">
+
+	</select>
+	
+	<insert id="insertFlowActivityDomain" parameterType="FlowActivityDomain">
+	insert into 
+	pf_flow_activity(
+		 		ID , 
+        		activity_NAME, 
+        		activity_Type , 
+        		activity_CODE , 
+        		SHOW_ATTR , 
+        		activity_DES , 
+        		RELATED_FLOWID , 
+        		RELATED_FLOWNAME , 
+        		RELATED_EXECUTEID , 
+        		SCRIPT_PATH
+			)values(
+				#{id},
+				#{activityName,jdbcType=VARCHAR}, 
+				#{activityType,jdbcType=INTEGER},
+				#{activityCode,jdbcType=VARCHAR}, 
+				#{showAttr,jdbcType=VARCHAR},
+				#{activityDes,jdbcType=VARCHAR},
+				#{relatedFlowId,jdbcType=INTEGER},
+				#{relatedFlowName,jdbcType=VARCHAR},
+				#{relatedExecuteId,jdbcType=INTEGER},
+				#{scriptPath,jdbcType=VARCHAR}
+			)
+	</insert>
+	
+	<insert id="insertObject" parameterType="FlowActivityDomain">
+	insert into 
+	pf_flow_activity(
+		 		ID , 
+        		activity_NAME, 
+        		activity_Type , 
+        		activity_CODE , 
+        		SHOW_ATTR , 
+        		activity_DES , 
+        		RELATED_FLOWID , 
+        		RELATED_FLOWNAME , 
+        		RELATED_EXECUTEID , 
+        		SCRIPT_PATH
+			)values(
+				#{id},
+				#{activityName,jdbcType=VARCHAR}, 
+				#{activityType,jdbcType=INTEGER},
+				#{activityCode,jdbcType=VARCHAR}, 
+				#{showAttr,jdbcType=VARCHAR},
+				#{activityDes,jdbcType=VARCHAR},
+				#{relatedFlowId,jdbcType=INTEGER},
+				#{relatedFlowName,jdbcType=VARCHAR},
+				#{relatedExecuteId,jdbcType=INTEGER},
+				#{scriptPath,jdbcType=VARCHAR}
+			)
+	</insert>	
+	
+	<resultMap id="result"
+		type="com.ohand.ohandFlow.domain.FlowActivityDomain">
+		<result property="id" column="Id" />
+		<result property="activityName" column="activity_Name" />
+		<result property="activityType" column="activity_Type" />
+		<result property="activityCode" column="activity_Code" />
+		<result property="showAttr" column="show_Attr" />
+		<result property="activityDes" column="activity_Des" />
+		<result property="relatedFlowId" column="related_FlowId" />
+		<result property="relatedFlowName" column="related_FlowName" />
+		<result property="relatedExecuteId" column="related_ExecuteId" />
+		<result property="scriptPath" column="script_Path" />
+	</resultMap>
+
+	<sql id="tableColumn"> Id,activity_Name,activity_Type,activity_Code,show_Attr,activity_Des,related_FlowId,related_FlowName,related_ExecuteId,script_Path</sql>	
+	
+	<sql id="dynamicCondition"> 
+			<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+			<if test="activityName != null"> AND activity_Name like #{activityName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="activityType != null"> AND activity_Type = #{activityType,jdbcType=INTEGER}  		</if>
+			<if test="activityCode != null"> AND activity_Code = #{activityCode ,jdbcType=VARCHAR}   </if>
+			<if test="showAttr != null"> AND show_Attr like #{showAttr , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="activityDes != null"> AND activity_Des like #{activityDes , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="relatedFlowId != null"> AND related_FlowId = #{relatedFlowId,jdbcType=INTEGER}  		</if>
+			<if test="relatedFlowName != null"> AND related_FlowName like #{relatedFlowName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="relatedExecuteId != null"> AND related_ExecuteId = #{relatedExecuteId,jdbcType=INTEGER}  		</if>		
+			<if test="scriptPath != null"> AND script_Path like #{scriptPath , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>	</sql>	
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}  		</when>
+			 <otherwise>   order by 	 Id	desc  	</otherwise>
+		</choose>
+	</sql>	
+	
+	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_flow_activity 
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			*
+		FROM pf_flow_activity  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	 </select>
+	
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			*
+		FROM pf_flow_activity  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>	
+	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_flow_activity  
+		WHERE 1=1 
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>	
+	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+		count(1) numb
+		FROM pf_flow_activity  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+	
+	<select id="getObjectVOListTreePagination" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			*
+		FROM pf_flow_activity  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>
+	<select id="getObjectVOListTreeCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+		count(1) numb
+		FROM pf_flow_activity  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>
+	
+	<update id="updateObject" parameterType="FlowActivityDomain">
+		UPDATE pf_flow_activity   SET id=id 
+			<if test="activityName != null"> , activity_Name = #{activityName,jdbcType=VARCHAR} </if>
+			<if test="activityType != null"> , activity_Type = #{activityType,jdbcType=INTEGER} </if>
+			<if test="activityCode != null"> , activity_Code = #{activityCode,jdbcType=VARCHAR} </if>
+			<if test="connName != null"> , conn_Name = #{connName,jdbcType=VARCHAR}  		</if>
+			<if test="connCode != null"> , conn_Code = #{connCode,jdbcType=INTEGER}  		</if>
+			<if test="preId != null"> , pre_Id = #{preId,jdbcType=INTEGER}  		</if>
+			<if test="nextId != null"> , next_Id = #{nextId,jdbcType=INTEGER}  		</if>
+			<if test="relatedFlowId != null"> , related_FlowId = #{relatedFlowId,jdbcType=INTEGER}  		</if>			
+			<if test="relatedFlowName != null"> , related_FlowName = #{relatedFlowName,jdbcType=VARCHAR}  		</if>
+	    WHERE Id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<delete  id="deleteObjectById" parameterType="int" >
+		DELETE FROM pf_flow_activity  WHERE ID= #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<delete  id="deleteObjectByRelatedFlowId" parameterType="int" >
+		DELETE FROM pf_flow_activity  WHERE related_FlowId= #{relatedFlowId,jdbcType=INTEGER}
+	</delete>
+	
+</mapper>

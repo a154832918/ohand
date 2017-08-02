@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohand.ohandFlow.domain.TableFieldIncrease">
+	<select id="getTableFieldIncrease"
+		parameterType="com.ohand.ohandFlow.domain.TableFieldIncrease"
+		resultType="com.ohand.ohandFlow.domain.TableFieldIncrease">
+		SELECT id , table_name tableName, field_name fieldName,next_val nextVal 
+		FROM
+		pf_table_field_increase
+		WHERE table_name =
+		#{tableName,jdbcType=VARCHAR} and field_name=
+		#{fieldName,jdbcType=VARCHAR}
+	</select>
+	<update id="updateTableFieldIncrease"
+		parameterType="com.ohand.ohandFlow.domain.TableFieldIncrease">
+		UPDATE pf_table_field_increase
+		SET
+		next_val =
+		#{nextVal,jdbcType=INTEGER}
+		WHERE table_name
+		=#{tableName,jdbcType=VARCHAR} and
+		field_name=#{fieldName,jdbcType=VARCHAR}
+	</update>
+</mapper>

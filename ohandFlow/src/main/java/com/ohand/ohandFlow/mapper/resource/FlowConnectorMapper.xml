@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.ohand.ohandFlow.mapper.FlowConnectorMapper">
+	<select id="getFlowConnectorListCommon" parameterType="FlowConnectorDomain"
+		resultType="FlowConnectorDomain">
+		SELECT id ,conn_name ,conn_code ,pre_id ,next_id ,
+		related_flowId ,related_flowName,text_Pos,props,dots
+		FROM pf_flow_connector
+		WHERE NAME =
+		#{name}
+	</select>
+	<insert id="insertFlowConnectorDomain" parameterType="FlowConnectorDomain">
+		INSERT INTO
+		pf_flow_connector
+			(
+				id ,
+				conn_name ,
+				conn_code ,
+				pre_id ,
+				next_id ,
+				related_flowId ,
+				related_flowName,
+				text_Pos,
+				props,
+				dots
+			)
+		VALUES
+			(	#{id},
+				#{connName,jdbcType=VARCHAR},
+				#{connCode,jdbcType=INTEGER}, 
+				#{preId,jdbcType=INTEGER}, 
+				#{nextId,jdbcType=INTEGER},
+				#{relatedFlowId,jdbcType=INTEGER},
+				#{relatedFlowName,jdbcType=INTEGER},
+				#{textPos,jdbcType=VARCHAR},
+				#{props,jdbcType=VARCHAR},
+				#{dots,jdbcType=VARCHAR}
+			)
+	</insert>
+	
+	<insert id="insertObject" parameterType="FlowObjDomain">
+			INSERT INTO
+			pf_flow_connector
+				(
+					id ,
+					conn_name ,
+					conn_code ,
+					pre_id ,
+					next_id ,
+					related_flowId ,
+					related_flowName,
+					text_Pos,
+					props,
+					dots
+				)
+			VALUES
+				(	#{id},
+					#{connName,jdbcType=VARCHAR},
+					#{connCode,jdbcType=INTEGER}, 
+					#{preId,jdbcType=INTEGER}, 
+					#{nextId,jdbcType=INTEGER},
+					#{relatedFlowId,jdbcType=INTEGER},
+					#{relatedFlowName,jdbcType=INTEGER},
+					#{textPos,jdbcType=VARCHAR},
+					#{props,jdbcType=VARCHAR},
+					#{dots,jdbcType=VARCHAR}
+				)
+	</insert>
+	
+	<resultMap id="result"
+		type="com.ohand.ohandFlow.domain.FlowConnectorDomain">
+		<result property="id" column="Id" />
+		<result property="connName" column="conn_Name" />
+		<result property="connCode" column="conn_Code" />
+		<result property="preId" column="pre_Id" />
+		<result property="nextId" column="next_Id" />
+		<result property="relatedFlowId" column="related_FlowId" />
+		<result property="relatedFlowName" column="related_FlowName" />
+		<result property="textPos" column="text_Pos" />
+		<result property="props" column="props" />
+		<result property="dots" column="dots" />
+	</resultMap>
+
+	<sql id="tableColumn"> Id,conn_Name,conn_Code,pre_Id,next_Id,related_FlowId,related_FlowName,text_Pos,props</sql>	
+	
+	<sql id="dynamicCondition"> 
+			<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+			<if test="connName != null"> AND conn_Name like #{connName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="textPos != null"> AND text_Pos like #{textPos , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="props != null"> AND props like #{props , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="connCode != null"> AND conn_Code = #{connCode ,jdbcType=INTEGER}   </if>
+			<if test="preId != null"> AND pre_Id = #{preId,jdbcType=INTEGER}  		</if>
+			<if test="nextId != null"> AND next_Id = #{nextId,jdbcType=INTEGER}  		</if>
+		    <if test="relatedFlowId != null"> AND related_FlowId = #{relatedFlowId,jdbcType=INTEGER}  		</if>
+		    <if test="relatedFlowName != null"> AND related_FlowName like #{relatedFlowName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		    <if test="dots != null"> AND dots like #{dots , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>						 
+	</sql>	
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}  		</when>
+			 <otherwise>   order by 	 Id	desc  	</otherwise>
+		</choose>
+	</sql>	
+	
+	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_flow_connector 
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			*
+		FROM pf_flow_connector 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	 </select>
+	
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			*
+		FROM pf_flow_connector  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>	
+	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_flow_connector 
+		WHERE 1=1 
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>	
+	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+		count(1) numb
+		FROM pf_flow_connector 
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+	
+	<select id="getObjectVOListTreePagination" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			*
+		FROM pf_flow_connector  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>
+	<select id="getObjectVOListTreeCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+		count(1) numb
+		FROM pf_flow_connector  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+		<include refid="orderByFragment"/>
+	</select>
+	
+	<update id="updateObject" parameterType="FlowObjDomain">
+		UPDATE pf_flow_connector   SET id=id 
+			<if test="connName != null"> , conn_Name = #{connName,jdbcType=VARCHAR}  		</if>
+			<if test="textPos != null"> , text_Pos = #{textPos,jdbcType=VARCHAR}  		</if>
+			<if test="props != null"> , props = #{props,jdbcType=VARCHAR}  		</if>
+			<if test="connCode != null"> , conn_Code = #{connCode,jdbcType=INTEGER}  		</if>
+			<if test="preId != null"> , pre_Id = #{preId,jdbcType=INTEGER}  		</if>
+			<if test="nextId != null"> , next_Id = #{nextId,jdbcType=INTEGER}  		</if>
+			<if test="relatedFlowId != null"> , related_FlowId = #{relatedFlowId,jdbcType=INTEGER}  		</if>			
+			<if test="relatedFlowName != null"> , related_FlowName = #{relatedFlowName,jdbcType=VARCHAR}  		</if>
+			<if test="dots != null"> , dots = #{dots,jdbcType=VARCHAR}  		</if>
+	    WHERE Id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<delete  id="deleteObjectById" parameterType="int" >
+		DELETE FROM pf_flow_connector   WHERE ID= #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<delete  id="deleteObjectByRelatedFlowId" parameterType="int" >
+		DELETE FROM pf_flow_connector  WHERE related_FlowId= #{relatedFlowId,jdbcType=INTEGER}
+	</delete>
+	
+</mapper>

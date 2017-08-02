@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandUser.mapper.PersonImageMapper">
+  <resultMap id="result" type="com.ohand.ohandUser.domain.PersonImageDomain">
+      <result property="id" column="id" />
+      <result property="fileName" column="file_name" />
+      <result property="suffix" column="suffix" />
+      <result property="filePath" column="file_Path" />
+      <result property="fileVersion" column="file_Version" />
+      <result property="relatedAccount" column="related_Account" />
+      <result property="relatedCommonId" column="related_CommonId" />
+      <result property="relatedPersonName" column="related_PersonName" />
+      <result property="uploader" column="uploader" />
+      <result property="uploaderId" column="uploader_Id" />
+      <result property="uploaderDate" column="uploader_Date" />
+      <result property="encryptType" column="encrypt_Type" />
+      <result property="passKey" column="pass_Key" />
+      <result property="imageType" column="image_Type" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  id
+				  ,file_name
+				  ,suffix
+				  ,file_Path
+				  ,file_Version
+				  ,related_Account
+				  ,related_CommonId
+				  ,related_PersonName
+				  ,uploader
+				  ,uploader_Id
+				  ,uploader_Date
+				  ,encrypt_Type
+				  ,pass_Key
+				  ,image_Type
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=VARCHAR}  		</if>
+		<if test="fileName != null"> AND file_name like #{fileName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="suffix != null"> AND suffix = #{suffix,jdbcType=VARCHAR}  		</if>
+		<if test="fileVersion != null"> AND file_Version = #{fileVersion,jdbcType=INTEGER}  		</if>
+		<if test="relatedAccount != null"> AND related_Account = #{relatedAccount,jdbcType=VARCHAR}  		</if>
+		<if test="relatedCommonId != null"> AND related_CommonId = #{relatedCommonId,jdbcType=INTEGER}  		</if>
+		<if test="relatedPersonName != null"> AND file_name like #{relatedPersonName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="uploader != null"> AND uploader like #{uploader , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="uploaderId != null"> AND uploader_Id = #{uploaderId,jdbcType=INTEGER}  		</if>
+		<if test="uploaderDate != null"> AND uploader_Date  = #{uploaderDate,jdbcType=TIMESTAMP}  	</if>
+		<if test="encryptType != null"> AND encrypt_Type = #{encryptType,jdbcType=INTEGER}  		</if>
+		<if test="passKey != null"> AND pass_Key = #{passKey,jdbcType=VARCHAR}  		</if>
+		<if test="imageType != null"> AND image_Type = #{imageType,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}   #{ascOrDesc} </when>
+			 <otherwise>   order by 	 Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_person_image  
+		WHERE ID= #{id,jdbcType=VARCHAR}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_person_image  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_person_image  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_person_image  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_person_image  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="PersonDomain">
+    insert into pf_person_image
+                   (   
+				  Id
+				  ,file_name
+				  ,suffix
+				  ,file_Path
+				  ,file_Version
+				  ,related_Account
+				  ,related_CommonId
+				  ,related_PersonName
+				  ,uploader
+				  ,uploader_Id
+				  ,uploader_Date
+				  ,encrypt_Type
+				  ,pass_Key
+				  ,image_Type
+                   )
+            values (
+				   #{id,jdbcType=VARCHAR}
+				  ,#{fileName,jdbcType=VARCHAR}
+				  ,#{suffix,jdbcType=VARCHAR}
+				  ,#{filePath,jdbcType=VARCHAR}
+				  ,#{fileVersion,jdbcType=INTEGER}
+				  ,#{relatedAccount,jdbcType=VARCHAR}
+				  ,#{relatedCommonId,jdbcType=INTEGER}
+				  ,#{relatedPersonName,jdbcType=VARCHAR}
+				  ,#{uploader,jdbcType=VARCHAR}
+				  ,#{uploaderId,jdbcType=INTEGER}
+				  ,#{uploaderDate,jdbcType=TIMESTAMP}
+				  ,#{encryptType,jdbcType=INTEGER}
+				  ,#{passKey,jdbcType=VARCHAR}
+				  ,#{imageType,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="PersonDomain">
+    update pf_person_image 
+                 set     id=id  
+   						<if test="fileName"  >,<![CDATA[ file_name=#{fileName,jdbcType=VARCHAR} ]]></if>
+   						<if test="suffix!=null"  >,<![CDATA[ suffix=#{suffix,jdbcType=VARCHAR} ]]></if>
+   						<if test="filePath!=null"  >,<![CDATA[ file_Path=#{filePath,jdbcType=VARCHAR} ]]></if>
+   						<if test="fileVersion!=null"  >,<![CDATA[ file_Version=#{fileVersion,jdbcType=INTEGER} ]]></if>
+   						<if test="relatedAccount!=null"  >,<![CDATA[ related_Account=#{relatedAccount,jdbcType=VARCHAR} ]]></if>
+   						<if test="relatedCommonId!=null"  >,<![CDATA[ related_CommonId=#{relatedCommonId,jdbcType=INTEGER} ]]></if>
+   						<if test="relatedPersonName"  >,<![CDATA[ related_PersonName=#{relatedPersonName,jdbcType=VARCHAR} ]]></if>
+   						<if test="uploader"  >,<![CDATA[ uploader=#{uploader,jdbcType=VARCHAR} ]]></if>
+   						<if test="uploaderId!=null"  >,<![CDATA[ uploader_Id=#{uploaderId,jdbcType=INTEGER} ]]></if>
+   						<if test="uploaderDate!=null"  >,<![CDATA[ uploader_Date=#{uploaderDate,jdbcType=TIMESTAMP} ]]></if>
+   						<if test="encryptType!=null"  >,<![CDATA[ encrypt_Type=#{encryptType,jdbcType=INTEGER} ]]></if>
+   						<if test="passKey"  >,<![CDATA[ pass_Key=#{passKey,jdbcType=VARCHAR} ]]></if>
+   						<if test="imageType!=null"  >,<![CDATA[ image_Type=#{imageType,jdbcType=INTEGER} ]]></if>
+ 				WHERE Id = #{id,jdbcType=VARCHAR} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="java.lang.String" >
+    DELETE FROM pf_person_image    WHERE ID= #{id,jdbcType=VARCHAR}
+  </delete> 
+
+</mapper>
+

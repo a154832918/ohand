@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandUser.mapper.OrganizeRPersonMapper">
+  <resultMap id="result" type="com.ohand.ohandUser.domain.OrganizeRPersonDomain">
+      <result property="id" column="Id" />
+      <result property="organizeId" column="Organize_Id" />
+      <result property="personId" column="Person_Id" />
+      <result property="organizeName" column="Organize_Name" />
+      <result property="personName" column="Person_Name" />
+  </resultMap>
+	
+  <sql id="tableColumn"> 
+				  Id
+				  ,Organize_Id
+				  ,Person_Id
+				  ,Organize_Name
+				  ,Person_Name
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="organizeId != null"> AND organize_Id = #{organizeId,jdbcType=INTEGER}  		</if>
+		<if test="personId != null"> AND person_Id = #{personId,jdbcType=INTEGER}  		</if>
+		<if test="organizeName != null"> AND organize_Name like #{organizeName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="personName != null"> AND person_Name like #{personName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>		
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}  	#{AscOrDesc} 	</when>
+			 <otherwise>   order by Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_organize_r_person  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_organize_r_person  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_organize_r_person  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			b.*
+		FROM pf_person b  
+		WHERE  b.id in (
+				 select a.person_id from pf_organize_r_person  a where 1=1  
+				<if test="id != null"> AND a.id = #{id,jdbcType=INTEGER}  		</if>
+				<if test="organizeId != null"> AND a.organize_Id = #{organizeId,jdbcType=INTEGER}  		</if>
+				<if test="personId != null"> AND a.person_Id = #{personId,jdbcType=INTEGER}  		</if>
+				<if test="organizeName != null"> AND a.organize_Name like #{organizeName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+				<if test="personName != null"> AND a.person_Name like #{personName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>		
+			)
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_person b  
+		WHERE  b.id in (
+				 select a.person_id from pf_organize_r_person  a where 1=1  
+				<if test="id != null"> AND a.id = #{id,jdbcType=INTEGER}  		</if>
+				<if test="organizeId != null"> AND a.organize_Id = #{organizeId,jdbcType=INTEGER}  		</if>
+				<if test="personId != null"> AND a.person_Id = #{personId,jdbcType=INTEGER}  		</if>
+				<if test="organizeName != null"> AND a.organize_Name like #{organizeName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+				<if test="personName != null"> AND a.person_Name like #{personName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>		
+			)
+	</select>
+ <insert id="insertObject" parameterType="OrganizeRPersonDomain">
+    insert into pf_organize_r_person
+                   (   
+				  Id
+				  ,Organize_Id
+				  ,Person_Id
+				  ,Organize_Name
+				  ,Person_Name
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{organizeId,jdbcType=INTEGER}
+				  ,#{personId,jdbcType=INTEGER}
+				  ,#{organizeName,jdbcType=VARCHAR}
+				  ,#{personName,jdbcType=VARCHAR}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="OrganizeRPersonDomain">
+    update pf_organize_r_person 
+                 set     id=id  
+   						<if test="organizeId!=null"  >,<![CDATA[ Organize_Id=#{organizeId,jdbcType=INTEGER} ]]></if>
+   						<if test="personId!=null"  >,<![CDATA[ Person_Id=#{personId,jdbcType=INTEGER} ]]></if>
+   						<if test="organizeName!=null"  >,<![CDATA[ Organize_Name=#{organizeName,jdbcType=VARCHAR} ]]></if>
+   						<if test="personName!=null"  >,<![CDATA[ Person_Name=#{personName,jdbcType=VARCHAR} ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_organize_r_person    WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+
+  <delete id="deleteObjectByPersonId" parameterType="int" >
+    DELETE FROM pf_organize_r_person    WHERE Person_Id= #{personId,jdbcType=INTEGER}
+  </delete> 
+
+  <delete id="deleteObjectByOrganizeId" parameterType="int" >
+    DELETE FROM pf_organize_r_person    WHERE Organize_Id= #{organizeId,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>

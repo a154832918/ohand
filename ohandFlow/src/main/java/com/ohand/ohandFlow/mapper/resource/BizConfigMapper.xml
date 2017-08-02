@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.BizConfigMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.BizConfigDomain">
+      <result property="id" column="Id" />
+      <result property="tableName" column="Table_Name" />
+      <result property="flowId" column="Flow_Id" />
+      <result property="flowCode" column="Flow_Code" />
+      <result property="isLast" column="Is_Last" />
+      <result property="publishVersion" column="Publish_Version" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Table_Name
+				  ,Flow_Id
+				  ,Flow_Code
+				  ,Is_Last
+				  ,Publish_Version
+  </sql>
+  <sql id="dynamicCondition">  
+		<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+		<if test="tableName != null"> AND Table_Name like #{tableName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+		<if test="flowId != null"> AND Flow_Id = #{flowId,jdbcType=INTEGER}  		</if>
+		<if test="flowCode != null"> AND Flow_Code = #{flowCode,jdbcType=INTEGER}  		</if>
+		<if test="isLast != null"> AND Is_Last = #{isLast,jdbcType=INTEGER}  		</if>
+		<if test="publishVersion != null"> AND Publish_Version = #{publishVersion,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}   #{ascOrDesc} </when>
+			 <otherwise>   order by 	 Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_biz_config  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_biz_config    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_biz_config   
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_biz_config    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			count(1) numb
+		FROM pf_biz_config    
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="BizConfigDomain">
+    insert into pf_biz_config
+                   (   
+				  Id
+				  ,Table_Name
+				  ,Flow_Id
+				  ,Flow_Code
+				  ,Is_Last
+				  ,Publish_Version
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{tableName,jdbcType=VARCHAR}
+				  ,#{flowId,jdbcType=INTEGER}
+				  ,#{flowCode,jdbcType=INTEGER}
+				  ,#{isLast,jdbcType=INTEGER}
+				  ,#{publishVersion,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="BizConfigDomain">
+    update pf_biz_config 
+                 set     id=id  
+   						<if test="tableName!=null"  >,<![CDATA[ Table_Name=#{tableName,jdbcType=VARCHAR}# ]]></if>
+   						<if test="flowId!=null"  >,<![CDATA[ Flow_Id=#{flowId,jdbcType=INTEGER}# ]]></if>
+   						<if test="flowCode!=null"  >,<![CDATA[ Flow_Code=#{flowCode,jdbcType=INTEGER}# ]]></if>
+   						<if test="isLast!=null"  >,<![CDATA[ Is_Last=#{isLast,jdbcType=INTEGER}# ]]></if>
+   						<if test="publishVersion!=null"  >,<![CDATA[ Publish_Version=#{publishVersion,jdbcType=INTEGER}# ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectById" parameterType="int" >
+    DELETE FROM pf_biz_config   WHERE ID= #{id,jdbcType=INTEGER}
+  </delete> 
+	
+	<select id="getTables" parameterType="java.util.Map"
+		resultType="hashmap">
+		<choose> 
+			<when test="dbType == 'oracle'"> 
+				select * from user_all_tables
+			</when>
+			<when test="dbType == 'mysql'"> 
+				SELECT * FROM INFORMATION_SCHEMA.TABLES  where TABLE_SCHEMA="hgesavjzxtuzobnpwcxb" 
+			</when>
+			<otherwise> 
+				
+			</otherwise> 
+		</choose>
+	</select>	
+	
+</mapper>

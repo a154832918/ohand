@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohand.ohandFlow.mapper.FormObjMapper">
+  <resultMap id="result" type="com.ohand.ohandFlow.domain.FormObjDomain">
+      <result property="id" column="Id" />
+      <result property="formName" column="Form_Name" />
+      <result property="formCode" column="Form_Code" />
+      <result property="creatorId" column="Creator_Id" />
+      <result property="creator" column="Creator" />
+      <result property="createDate" column="Create_Date" />
+      <result property="bindingVersion" column="Binding_Version" />
+      <result property="lastVersion" column="Last_Version" />
+      <result property="formVersion" column="Form_Version" />
+      <result property="isLastVersion" column="Is_Last_Version" />
+      <result property="isBindingVersion" column="" />
+      <result property="formPath" column="Form_Path" />
+      <result property="formDes" column="Form_Des" />
+      <result property="formType" column="form_Type" />
+  </resultMap>
+  <sql id="tableColumn"> 
+				  Id
+				  ,Form_Name
+				  ,Form_Code
+				  ,Creator_Id
+				  ,Creator
+				  ,Create_Date
+				  ,Binding_Version
+				  ,Last_Version
+				  ,Form_Version
+				  ,Is_Last_Version
+				  ,is_Binding_Version
+				  ,Form_Path
+				  ,Form_Des
+				  ,form_Type
+  </sql>
+  <sql id="dynamicCondition"> 
+  			<if test="id != null"> AND id = #{id,jdbcType=INTEGER}  		</if>
+			<if test="formName != null"> AND form_Name like #{formName , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="formCode != null"> AND form_Code = #{formCode,jdbcType=INTEGER} </if>
+			<if test="creatorId != null"> AND creator_Id = #{id,jdbcType=INTEGER} </if>
+			<if test="creator != null"> AND creator like  #{creator , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="createDate != null"> AND create_Date  = #{createDate,jdbcType=TIMESTAMP}  	</if>
+			<if test="gtcreateDate != null"> <![CDATA[  AND create_Date  >= #{gtcreateDate,jdbcType=TIMESTAMP} ]]>	 </if>
+			<if test="ltcreateDate != null">  <![CDATA[   AND create_Date <= #{ltcreateDate,jdbcType=TIMESTAMP} ]]>	 </if>
+			<if test="formVersion != null"> AND form_Version = #{formVersion,jdbcType=INTEGER} </if>
+			<if test="bindingVersion != null"> AND binding_Version = #{bindingVersion,jdbcType=INTEGER} </if>
+			<if test="lastVersion != null"> AND last_Version = #{lastVersion,jdbcType=INTEGER} </if>
+			<if test="isLastVersion != null"> AND is_Last_Version  = #{isLastVersion,jdbcType=INTEGER}  		</if>
+			<if test="isBindingVersion != null"> AND is_Binding_Version  = #{isBindingVersion,jdbcType=INTEGER}  		</if>
+			<if test="formPath != null"> AND form_Path like  #{formPath , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+			<if test="formDes != null"> AND form_Des like  #{formDes , typeHandler=com.ohand.common.plugin.mybaits.LikePlusPercentTagCallback} </if>
+  			<if test="formType != null"> AND form_Type  = #{formType,jdbcType=INTEGER}  		</if>
+  </sql>
+	<sql id="orderByFragment">
+		<choose>
+			 <when test="orderByField != null "> order by #{orderByField}  #{ascOrDesc} 		</when>
+			 <otherwise>   order by 	 Id	desc  	</otherwise>
+		</choose>
+	</sql>
+  	<select id="getObjectVOById" parameterType="int" resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM
+		pf_form_obj  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getFlowObjVOById" parameterType="int" resultType="hashmap">
+		SELECT
+				Id,
+				flow_name,
+				flow_code,
+				creator_Id,
+				creator,
+				last_version,
+				binding_Version,
+				is_binding_version,
+				create_date,
+				flow_version,
+				is_last_version,
+				flow_path,
+				flow_des,
+				flow_categoryId	
+		FROM
+		Pf_Flow_Obj  
+		WHERE ID= #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getObjectMapList" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM 	pf_form_obj  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	 </select>
+	<select id="getObjectVOList" parameterType="java.util.Map"
+		resultMap="result">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_obj  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListPagination" parameterType="java.util.Map"
+		resultType="hashmap">
+		SELECT
+			<include refid="tableColumn"/>
+		FROM pf_form_obj  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>	
+	<select id="getObjectMapListCount" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+			count(1) numb
+		FROM pf_form_obj  
+		WHERE 1=1
+		<include refid="dynamicCondition"/>
+	</select>
+ <insert id="insertObject" parameterType="FormObjDomain">
+    insert into pf_form_obj
+                   (   
+				  Id
+				  ,Form_Name
+				  ,Form_Code
+				  ,Creator_Id
+				  ,Creator
+				  ,Create_Date
+				  ,Form_Version
+				  ,Last_Version
+				  ,binding_Version
+				  ,Is_Last_Version
+				  ,is_Binding_Version
+				  ,Form_Path
+				  ,Form_Des
+				  ,form_Type
+                   )
+            values (
+				  #{id,jdbcType=INTEGER}
+				  ,#{formName,jdbcType=VARCHAR}
+				  ,#{formCode,jdbcType=INTEGER}
+				  ,#{creatorId,jdbcType=INTEGER}
+				  ,#{creator,jdbcType=VARCHAR}
+				  ,#{createDate,jdbcType=TIMESTAMP}
+				  ,#{formVersion,jdbcType=INTEGER}
+				  ,#{lastVersion,jdbcType=INTEGER}
+				  ,#{bindingVersion,jdbcType=INTEGER}
+				  ,#{isLastVersion,jdbcType=INTEGER}
+				  ,#{isBindingVersion,jdbcType=INTEGER}
+				  ,#{formPath,jdbcType=VARCHAR}
+				  ,#{formDes,jdbcType=VARCHAR}
+				  ,#{formType,jdbcType=INTEGER}
+                   )
+  </insert>
+  <update id="updateObject" parameterType="FormObjDomain">
+    update pf_form_obj 
+                 set     id=id  
+   						<if test="formName!=null"  >,<![CDATA[ Form_Name=#{formName,jdbcType=VARCHAR} ]]></if>
+   						<if test="formCode!=null"  >,<![CDATA[ Form_Code=#{formCode,jdbcType=INTEGER} ]]></if>
+   						<if test="creatorId!=null"  >,<![CDATA[ Creator_Id=#{creatorId,jdbcType=INTEGER} ]]></if>
+   						<if test="creator!=null"  >,<![CDATA[ Creator=#{creator,jdbcType=VARCHAR} ]]></if>
+   						<if test="createDate!=null"  >,<![CDATA[ Create_Date=#{createDate,jdbcType=TIMESTAMP} ]]></if>
+   						<if test="formVersion!=null"  >,<![CDATA[ Form_Version=#{formVersion,jdbcType=INTEGER} ]]></if>
+   						<if test="lastVersion!=null"  >,<![CDATA[ Last_Version=#{lastVersion,jdbcType=INTEGER} ]]></if>
+   						<if test="bindingVersion!=null"  >,<![CDATA[ binding_Version=#{bindingVersion,jdbcType=INTEGER} ]]></if>
+   						<if test="isLastVersion!=null"  >,<![CDATA[ Is_Last_Version=#{isLastVersion,jdbcType=INTEGER} ]]></if>
+   						<if test="isBindingVersion!=null"  >,<![CDATA[ is_Binding_Version=#{isBindingVersion,jdbcType=INTEGER} ]]></if>
+   						<if test="formPath!=null"  >,<![CDATA[ Form_Path=#{formPath,jdbcType=VARCHAR} ]]></if>
+   						<if test="formDes!=null"  >,<![CDATA[ Form_Des=#{formDes,jdbcType=VARCHAR} ]]></if>
+   						<if test="formType!=null"  >,<![CDATA[ form_Type=#{formType,jdbcType=INTEGER} ]]></if>
+ 				WHERE Id = #{id,jdbcType=INTEGER} 
+  </update>  
+  <delete id="deleteObjectByFormCode" parameterType="int" >
+    	DELETE FROM pf_form_obj    WHERE Form_Code= #{formCode,jdbcType=INTEGER}
+  </delete> 
+
+</mapper>
+
