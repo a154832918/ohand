@@ -4,6 +4,7 @@ package com.ohand.common.exception;
  * @author Richard
  * @Emial a154832918@163.com
  * @version 2013-10-25
+ * 提交测试
  */
 public class BussinessException extends RuntimeException {
 
